@@ -23,6 +23,13 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private ConstraintLayout layout;
     private TextView capitalView;
     private Button tradeButton;
+    private Button portfolioButton;
+
+    private void redirectToPortfolioActivity(View view) {
+        hideKeyboard(view);
+        Intent intent = new Intent(getApplicationContext(), PortfolioActivity.class);
+        startActivity(intent);
+    }
 
     private void redirectToTradeActivity(View view) {
         hideKeyboard(view);
@@ -65,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         tradeButton = findViewById(R.id.tradeButton);
         tradeButton.setOnClickListener(this::redirectToTradeActivity);
+
+        portfolioButton = findViewById(R.id.portfolioButton);
+        portfolioButton.setOnClickListener(this::redirectToPortfolioActivity);
     }
 
 
