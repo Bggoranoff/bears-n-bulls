@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Trade Game</string>
+    <string name="username">Username</string>
+    <string name="default_amount">$967.81</string>
+    <string name="trade">Trade</string>
+    <string name="portfolio">Portfolio</string>
+    <string name="how_to">How to trade?</string>
+</resources>
