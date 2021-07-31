@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -20,6 +22,13 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private EditText usernameEditText;
     private ConstraintLayout layout;
     private TextView capitalView;
+    private Button tradeButton;
+
+    private void redirectToTradeActivity(View view) {
+        hideKeyboard(view);
+        Intent intent = new Intent(getApplicationContext(), TradeActivity.class);
+        startActivity(intent);
+    }
 
     private void hideKeyboard(View view) {
         saveUsername();
@@ -53,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         capitalView = findViewById(R.id.capitalTextView);
         capitalView.setOnClickListener(this::hideKeyboard);
+
+        tradeButton = findViewById(R.id.tradeButton);
+        tradeButton.setOnClickListener(this::redirectToTradeActivity);
     }
 
 
