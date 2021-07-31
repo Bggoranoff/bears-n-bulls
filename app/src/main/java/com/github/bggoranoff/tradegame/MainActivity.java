@@ -24,6 +24,13 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private TextView capitalView;
     private Button tradeButton;
     private Button portfolioButton;
+    private TextView manualView;
+
+    private void redirectToManualActivity(View view) {
+        hideKeyboard(view);
+        Intent intent = new Intent(getApplicationContext(), ManualActivity.class);
+        startActivity(intent);
+    }
 
     private void redirectToPortfolioActivity(View view) {
         hideKeyboard(view);
@@ -75,8 +82,10 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         portfolioButton = findViewById(R.id.portfolioButton);
         portfolioButton.setOnClickListener(this::redirectToPortfolioActivity);
-    }
 
+        manualView = findViewById(R.id.manualTextView);
+        manualView.setOnClickListener(this::redirectToManualActivity);
+    }
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {

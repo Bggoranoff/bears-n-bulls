@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TradeGame">
-        <activity android:name=".PortfolioActivity"></activity>
+        <activity android:name=".ManualActivity"></activity>
+        <activity android:name=".PortfolioActivity" />
         <activity android:name=".TradeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
