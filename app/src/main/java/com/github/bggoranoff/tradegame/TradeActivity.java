@@ -1,7 +1,9 @@
 package com.github.bggoranoff.tradegame;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.Objects;
 
@@ -17,13 +19,25 @@ public class TradeActivity extends AppCompatActivity {
 
     private Button openButton;
     private LinearLayout linearLayout;
+    private TextView textView;
+
+    private int lastClicked = -1;
 
     private void redirectToAssetActivity(View view) {
-        // TODO: redirect to asset activity with extra asset id
+        Intent intent = new Intent(getApplicationContext(), AssetActivity.class);
+        intent.putExtra("asset", textView.getText().toString());
+        startActivity(intent);
     }
 
     private void clickAssetIcon(View view) {
-        Toast.makeText(this, view.getTag().toString(), Toast.LENGTH_SHORT).show();
+        if(lastClicked != -1) {
+            findViewById(lastClicked).setBackground(AppCompatResources.getDrawable(getApplicationContext(), R.drawable.light_gray_icon));
+        } else {
+            openButton.setEnabled(true);
+        }
+        lastClicked = view.getId();
+        textView.setText(view.getTag().toString());
+        view.setBackground(AppCompatResources.getDrawable(getApplicationContext(), R.drawable.dark_gray_icon));
     }
 
     private void fillTable() {
@@ -35,7 +49,7 @@ public class TradeActivity extends AppCompatActivity {
     }
 
     private void fillStocksTable() {
-        TableLayout stocksTableLayout = findViewById(R.id.stocksTableLayout);
+        TableLayout stocksTableLayout = linearLayout.findViewById(R.id.stocksTableLayout);
         for(int i = 0; i < stocksTableLayout.getChildCount(); i++) {
             View rowView = stocksTableLayout.getChildAt(i);
             if(rowView instanceof TableRow) {
@@ -51,7 +65,7 @@ public class TradeActivity extends AppCompatActivity {
     }
 
     private void fillCommoditiesTable() {
-        TableLayout stocksTableLayout = findViewById(R.id.commoditiesTableLayout);
+        TableLayout stocksTableLayout = linearLayout.findViewById(R.id.commoditiesTableLayout);
         for(int i = 0; i < stocksTableLayout.getChildCount(); i++) {
             View rowView = stocksTableLayout.getChildAt(i);
             if(rowView instanceof TableRow) {
@@ -67,7 +81,7 @@ public class TradeActivity extends AppCompatActivity {
     }
 
     private void fillIndexTable() {
-        TableLayout stocksTableLayout = findViewById(R.id.indexTableLayout);
+        TableLayout stocksTableLayout = linearLayout.findViewById(R.id.indexTableLayout);
         for(int i = 0; i < stocksTableLayout.getChildCount(); i++) {
             View rowView = stocksTableLayout.getChildAt(i);
             if(rowView instanceof TableRow) {
@@ -83,7 +97,7 @@ public class TradeActivity extends AppCompatActivity {
     }
 
     private void fillCryptoTable() {
-        TableLayout stocksTableLayout = findViewById(R.id.cryptoTableLayout);
+        TableLayout stocksTableLayout = linearLayout.findViewById(R.id.cryptoTableLayout);
         for(int i = 0; i < stocksTableLayout.getChildCount(); i++) {
             View rowView = stocksTableLayout.getChildAt(i);
             if(rowView instanceof TableRow) {
@@ -99,7 +113,7 @@ public class TradeActivity extends AppCompatActivity {
     }
 
     private void fillForexTable() {
-        TableLayout stocksTableLayout = findViewById(R.id.forexTableLayout);
+        TableLayout stocksTableLayout = linearLayout.findViewById(R.id.forexTableLayout);
         for(int i = 0; i < stocksTableLayout.getChildCount(); i++) {
             View rowView = stocksTableLayout.getChildAt(i);
             if(rowView instanceof TableRow) {
@@ -121,9 +135,11 @@ public class TradeActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         linearLayout = findViewById(R.id.stocksLinearLayout);
+        textView = findViewById(R.id.stockTitleView);
         fillTable();
 
         openButton = findViewById(R.id.openButton);
         openButton.setOnClickListener(this::redirectToAssetActivity);
+        openButton.setEnabled(false);
     }
 }
