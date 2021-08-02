@@ -5,4 +5,43 @@
     <string name="trade">Trade</string>
     <string name="portfolio">Portfolio</string>
     <string name="how_to">How to trade?</string>
+
+    <string name="choose_stock">Choose stock…</string>
+    <string name="choose">Choose</string>
+    <string name="stocks"><u>stocks</u></string>
+    <string name="commodities"><u>commodities</u></string>
+    <string name="index"><u>index</u></string>
+    <string name="crypto"><u>crypto</u></string>
+    <string name="forex"><u>forex</u></string>
+    <string name="open">Open</string>
+
+    <string name="tesla">TSLA</string>
+    <string name="samsung">SMSN.IL</string>
+    <string name="mastercard">MA</string>
+    <string name="nike">NKE</string>
+    <string name="shell">RDS-A</string>
+
+    <string name="oil">CL=F</string>
+    <string name="gold">GC=F</string>
+    <string name="copper">HG=F</string>
+    <string name="gas">NG=F</string>
+    <string name="silver">SI=F</string>
+
+    <string name="nasdaq">^IXIC</string>
+    <string name="snp500">^GSPC</string>
+    <string name="ger30">^GDAXI</string>
+    <string name="ftse">^FTSE</string>
+    <string name="dji">^DJI</string>
+
+    <string name="bitcoin">BTC-USD</string>
+    <string name="etherium">ETH-USD</string>
+    <string name="cardano">ADA-USD</string>
+    <string name="tron">TRX-USD</string>
+    <string name="eos">EOS-USD</string>
+
+    <string name="eur">EURUSD=X</string>
+    <string name="jpy">JPYUSD=X</string>
+    <string name="gbp">GBPUSD=X</string>
+    <string name="chf">CHFUSD=X</string>
+    <string name="cad">CADUSD=X</string>
 </resources>
