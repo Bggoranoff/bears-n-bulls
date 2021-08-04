@@ -11,6 +11,7 @@
         android:roundIcon="@drawable/trading_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.TradeGame">
+        <activity android:name=".AssetActivity"></activity>
         <activity android:name=".ManualActivity" />
         <activity android:name=".PortfolioActivity" />
         <activity android:name=".TradeActivity" />

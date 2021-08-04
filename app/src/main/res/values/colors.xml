@@ -11,4 +11,6 @@
     <color name="black">#283747</color>
     <color name="white">#FFFFFF</color>
     <color name="light_gray">#D6DBDF</color>
+    <color name="lighter_gray">#EBEDEF</color>
+    <color name="darker_gray">#AEB6BF</color>
 </resources>
