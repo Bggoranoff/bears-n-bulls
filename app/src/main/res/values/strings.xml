@@ -44,4 +44,10 @@
     <string name="gbp">GBPUSD=X</string>
     <string name="chf">CHFUSD=X</string>
     <string name="cad">CADUSD=X</string>
+
+    <string name="company_name">Company Ltd.</string>
+    <string name="default_price">$30.26</string>
+    <string name="default_percent">5.87%</string>
+    <string name="buy">Buy</string>
+    <string name="sell">Sell</string>
 </resources>
