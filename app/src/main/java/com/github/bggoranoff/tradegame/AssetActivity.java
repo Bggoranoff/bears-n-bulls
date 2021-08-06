@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -27,6 +28,7 @@ import yahoofinance.histquotes.Interval;
 public class AssetActivity extends AppCompatActivity {
 
     private Stock stock;
+    private boolean active;
 
     private TextView assetPriceView;
     private TextView assetPercentageView;
@@ -53,8 +55,6 @@ public class AssetActivity extends AppCompatActivity {
             lineChart.animateXY(2000, 2000);
             lineChart.invalidate();
 
-            updateStockPrice(stock);
-
 //            new Handler().postDelayed(() -> {
 //                Toast.makeText(this, "Adding 1700!", Toast.LENGTH_SHORT).show();
 //                data.getDataSetByLabel(stock.getSymbol(), true).addEntry(new Entry(25f, 1700f));
@@ -79,16 +79,39 @@ public class AssetActivity extends AppCompatActivity {
         return lineDataSet;
     }
 
-    private void updateStockPrice(Stock stock) {
-        String currentPrice = "$" + stock.getQuote().getPrice().toString();
-        assetPriceView.setText(currentPrice);
+    private void updateStockPrice() {
+        AsyncTask.execute(() -> {
+            try {
+                stock = YahooFinance.get(getIntent().getStringExtra("asset"));
+                BigDecimal price = stock.getQuote(true).getPrice();
+                BigDecimal percentage = stock.getQuote().getChangeInPercent();
 
-        BigDecimal percentage = stock.getQuote().getChangeInPercent();
-        String currentPercentage = percentage.toString() + "%";
-        assetPercentageView.setText(currentPercentage);
-        if(percentage.compareTo(BigDecimal.ZERO) < 0) {
-            assetPercentageView.setTextColor(getColor(R.color.red));
-        }
+                runOnUiThread(() -> {
+                    String currentPrice = "$" + price.toString();
+                    assetPriceView.setText(currentPrice);
+
+                    String currentPercentage = percentage.toString() + "%";
+                    assetPercentageView.setText(currentPercentage);
+                    if(percentage.compareTo(BigDecimal.ZERO) < 0) {
+                        assetPercentageView.setTextColor(getColor(R.color.red));
+                    }
+
+                    int lastIndex = lineChart.getData().getEntryCount() - 1;
+                    lineChart.getData().getDataSetByLabel(stock.getSymbol(), true).removeEntry(lastIndex);
+                    lineChart.getData().getDataSetByLabel(stock.getSymbol(), true).addEntry(new Entry(lastIndex + 1, price.floatValue()));
+                    lineChart.getData().notifyDataChanged();
+                    lineChart.notifyDataSetChanged();
+                    lineChart.setVisibleXRangeMaximum(120f);
+                    lineChart.moveViewToX(lastIndex + 1);
+
+                    if(active) {
+                        new Handler().postDelayed(this::updateStockPrice, 10000);
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -114,5 +137,18 @@ public class AssetActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        active = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        active = true;
+        updateStockPrice();
     }
 }
