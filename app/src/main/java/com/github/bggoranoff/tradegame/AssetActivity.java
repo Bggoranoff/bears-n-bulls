@@ -4,13 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
@@ -27,21 +31,64 @@ public class AssetActivity extends AppCompatActivity {
     private TextView assetPriceView;
     private TextView assetPercentageView;
     private LineChart lineChart;
-    private SeekBar seekBar;
+
 
     private void displayStockData(Stock stock, List<HistoricalQuote> history) {
         runOnUiThread(() -> {
-
-            String currentPrice = "$" + stock.getQuote().getPrice().toString();
-            assetPriceView.setText(currentPrice);
-
-            BigDecimal percentage = stock.getQuote().getChangeInPercent();
-            String currentPercentage = percentage.toString() + "%";
-            assetPercentageView.setText(currentPercentage);
-            if(percentage.compareTo(BigDecimal.ZERO) < 0) {
-                assetPercentageView.setTextColor(getColor(R.color.red));
+            ArrayList<Entry> valueSet = new ArrayList<>();
+            ArrayList<String> daySet = new ArrayList<>();
+            for(int i = 0; i < history.size(); i++) {
+                valueSet.add(new Entry(i, history.get(i).getClose().floatValue()));
+                daySet.add(history.get(i).getDate().get(Calendar.DAY_OF_MONTH) + "/" + (history.get(i).getDate().get(Calendar.MONTH) + 1));
             }
+
+            int color = getColor(history.get(0).getClose().compareTo(history.get(history.size() - 1).getClose()) > 0 ? R.color.red : R.color.green);
+            LineData data = new LineData(getLineDataSet(valueSet, stock.getSymbol(), color));
+
+            lineChart.setData(data);
+            lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(daySet));
+            lineChart.getDescription().setText(stock.getName());
+            lineChart.getDescription().setTextSize(15f);
+
+            lineChart.animateXY(2000, 2000);
+            lineChart.invalidate();
+
+            updateStockPrice(stock);
+
+//            new Handler().postDelayed(() -> {
+//                Toast.makeText(this, "Adding 1700!", Toast.LENGTH_SHORT).show();
+//                data.getDataSetByLabel(stock.getSymbol(), true).addEntry(new Entry(25f, 1700f));
+//                data.getDataSetByLabel(stock.getSymbol(), true).removeEntry(data.getEntryCount() - 1);
+//                data.notifyDataChanged();
+//                lineChart.notifyDataSetChanged();
+//                lineChart.setVisibleXRangeMaximum(120f);
+//                lineChart.moveViewToX(data.getEntryCount());
+//            }, 5000);
         });
+    }
+
+    private LineDataSet getLineDataSet(ArrayList<Entry> valueSet, String label, int color) {
+        LineDataSet lineDataSet = new LineDataSet(valueSet, label);
+        lineDataSet.setColor(getColor(R.color.darker_gray));
+        lineDataSet.setLineWidth(1.75f);
+        lineDataSet.setCircleRadius(3f);
+        lineDataSet.setCircleHoleRadius(1f);
+        lineDataSet.setColor(color);
+        lineDataSet.setCircleColor(color);
+        lineDataSet.setDrawValues(false);
+        return lineDataSet;
+    }
+
+    private void updateStockPrice(Stock stock) {
+        String currentPrice = "$" + stock.getQuote().getPrice().toString();
+        assetPriceView.setText(currentPrice);
+
+        BigDecimal percentage = stock.getQuote().getChangeInPercent();
+        String currentPercentage = percentage.toString() + "%";
+        assetPercentageView.setText(currentPercentage);
+        if(percentage.compareTo(BigDecimal.ZERO) < 0) {
+            assetPercentageView.setTextColor(getColor(R.color.red));
+        }
     }
 
     @Override
@@ -54,7 +101,6 @@ public class AssetActivity extends AppCompatActivity {
         assetPercentageView = findViewById(R.id.assetPercentView);
 
         lineChart = findViewById(R.id.lineChart);
-        seekBar = findViewById(R.id.lineChartSeekBar);
 
         String stockId = getIntent().getStringExtra("asset");
         AsyncTask.execute(() -> {
