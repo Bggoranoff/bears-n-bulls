@@ -1,5 +1,7 @@
 package com.github.bggoranoff.tradegame.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
@@ -31,11 +33,12 @@ public class Wallet {
     }
 
     public void addPosition(Position position) {
-        if(positions.containsKey(position.getSymbol())) {
+        if(!positions.containsKey(position.getSymbol())) {
             positions.put(position.getSymbol(), new HashSet<>());
         }
         money -= position.getPrice() * position.getQuantity();
         Objects.requireNonNull(positions.get(position.getSymbol())).add(position);
+        System.out.println(toString());
     }
 
     public void closePosition(Position position, float currentPrice) {
@@ -43,5 +46,22 @@ public class Wallet {
             Objects.requireNonNull(positions.get(position.getSymbol())).remove(position);
             money += position.getQuantity() * currentPrice;
         }
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for(String symbol : positions.keySet()) {
+            result.append(symbol).append("\n");
+            HashSet<Position> currentPositions = Objects.requireNonNull(positions.get(symbol));
+            for(Position position : currentPositions) {
+                result.append(position.toString()).append("\n");
+            }
+        }
+        result.append("-----------------------------------\n")
+                .append("Available finances: ")
+                .append(money);
+        return result.toString();
     }
 }

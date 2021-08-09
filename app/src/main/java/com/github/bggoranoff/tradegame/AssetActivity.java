@@ -3,6 +3,7 @@ package com.github.bggoranoff.tradegame;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.bggoranoff.tradegame.model.Position;
 import com.github.bggoranoff.tradegame.model.Wallet;
@@ -71,10 +73,8 @@ public class AssetActivity extends AppCompatActivity {
         LineDataSet lineDataSet = new LineDataSet(valueSet, label);
         lineDataSet.setColor(getColor(R.color.darker_gray));
         lineDataSet.setLineWidth(1.75f);
-        lineDataSet.setCircleRadius(3f);
-        lineDataSet.setCircleHoleRadius(1f);
+        lineDataSet.setDrawCircles(false);
         lineDataSet.setColor(color);
-        lineDataSet.setCircleColor(color);
         lineDataSet.setDrawValues(false);
         return lineDataSet;
     }
@@ -119,25 +119,41 @@ public class AssetActivity extends AppCompatActivity {
 
         final EditText dialogEditText = new EditText(this);
         dialogEditText.setHint("Amount");
-        dialogEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        dialogEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
-        new AlertDialog.Builder(this)
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle((buy ? "Buy " : "Sell ") + stock.getSymbol())
                 .setMessage("Enter the amount you want to invest:")
                 .setView(dialogEditText)
-                .setPositiveButton(buy ? "Buy" : "Sell", (dialog, which) -> {
-                    Wallet wallet = CapitalObservable.getInstance().getWallet();
+                .setCancelable(false)
+                .setPositiveButton(buy ? "Buy" : "Sell", null)
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
+
+        Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(v -> {
+            try {
+                float investedAmount = Float.parseFloat(dialogEditText.getText().toString());
+                Wallet wallet = CapitalObservable.getInstance().getWallet();
+                if (investedAmount <= wallet.getMoney()) {
+                    float currentPrice = stock.getQuote().getPrice().floatValue();
                     wallet.addPosition(new Position(
                             stock.getSymbol(),
-                            stock.getQuote().getPrice().floatValue(),
-                            Float.parseFloat(dialogEditText.getText().toString()),
+                            currentPrice,
+                            investedAmount / currentPrice,
                             buy
                     ));
                     CapitalObservable.getInstance().setWallet(wallet);
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(this, "Amount not available!", Toast.LENGTH_SHORT).show();
+                }
+            } catch(NumberFormatException ex) {
+                Toast.makeText(this, "Enter a valid amount!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

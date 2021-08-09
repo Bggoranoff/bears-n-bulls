@@ -44,4 +44,14 @@ public class Position {
     public void setBuy(boolean buy) {
         this.buy = buy;
     }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "symbol='" + symbol + '\'' +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", buy=" + buy +
+                '}';
+    }
 }
