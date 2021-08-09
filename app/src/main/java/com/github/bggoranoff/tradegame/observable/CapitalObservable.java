@@ -1,5 +1,7 @@
 package com.github.bggoranoff.tradegame.observable;
 
+import com.github.bggoranoff.tradegame.model.Wallet;
+
 import java.util.Observable;
 
 public class CapitalObservable extends Observable {
@@ -22,7 +24,19 @@ public class CapitalObservable extends Observable {
         if(capital != this.capital) {
             this.capital = capital;
             this.setChanged();
-            this.notifyObservers( new ValueKey( ValueName.CAPITAL ) );
+            this.notifyObservers(new ValueKey(ValueName.CAPITAL));
         }
+    }
+
+    private Wallet wallet;
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+        this.setChanged();
+        this.notifyObservers(new ValueKey(ValueName.WALLET));
     }
 }

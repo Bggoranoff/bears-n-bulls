@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.github.bggoranoff.tradegame.model.Wallet;
+import com.github.bggoranoff.tradegame.observable.CapitalObservable;
+
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements View.OnKeyListener {
@@ -85,6 +88,10 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         manualView = findViewById(R.id.manualTextView);
         manualView.setOnClickListener(this::redirectToManualActivity);
+
+        CapitalObservable.getInstance().setWallet(new Wallet());
+        CapitalObservable.getInstance().setCapital(1000.0f);
+        // TODO: retrieve saved wallet and calculate capital
     }
 
     @Override
