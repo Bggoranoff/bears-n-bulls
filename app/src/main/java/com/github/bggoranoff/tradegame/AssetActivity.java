@@ -54,16 +54,6 @@ public class AssetActivity extends AppCompatActivity {
 
             lineChart.animateXY(2000, 2000);
             lineChart.invalidate();
-
-//            new Handler().postDelayed(() -> {
-//                Toast.makeText(this, "Adding 1700!", Toast.LENGTH_SHORT).show();
-//                data.getDataSetByLabel(stock.getSymbol(), true).addEntry(new Entry(25f, 1700f));
-//                data.getDataSetByLabel(stock.getSymbol(), true).removeEntry(data.getEntryCount() - 1);
-//                data.notifyDataChanged();
-//                lineChart.notifyDataSetChanged();
-//                lineChart.setVisibleXRangeMaximum(120f);
-//                lineChart.moveViewToX(data.getEntryCount());
-//            }, 5000);
         });
     }
 
