@@ -156,6 +156,10 @@ public class AssetActivity extends AppCompatActivity {
         });
     }
 
+    private void saveWallet() {
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -184,6 +188,12 @@ public class AssetActivity extends AppCompatActivity {
 
         sellButton = findViewById(R.id.sellButton);
         sellButton.setOnClickListener(this::openPosition);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        saveWallet();
     }
 
     @Override
