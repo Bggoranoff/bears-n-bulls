@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         CapitalObservable.getInstance().setWallet(new Wallet());
         CapitalObservable.getInstance().setCapital(1000.0f);
-        // TODO: retrieve saved wallet and calculate capital
     }
 
     @Override

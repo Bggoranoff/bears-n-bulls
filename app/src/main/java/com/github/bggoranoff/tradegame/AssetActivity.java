@@ -3,7 +3,10 @@ package com.github.bggoranoff.tradegame;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import com.github.bggoranoff.tradegame.model.Position;
 import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
+import com.github.bggoranoff.tradegame.util.DatabaseManager;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -27,6 +31,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,6 +41,9 @@ import yahoofinance.histquotes.HistoricalQuote;
 import yahoofinance.histquotes.Interval;
 
 public class AssetActivity extends AppCompatActivity {
+
+    private SharedPreferences sharedPreferences;
+    private SQLiteDatabase db;
 
     private Stock stock;
     private boolean active;
@@ -146,6 +154,7 @@ public class AssetActivity extends AppCompatActivity {
                             buy
                     ));
                     CapitalObservable.getInstance().setWallet(wallet);
+                    saveWallet();
                     dialog.dismiss();
                 } else {
                     Toast.makeText(this, "Amount not available!", Toast.LENGTH_SHORT).show();
@@ -157,7 +166,14 @@ public class AssetActivity extends AppCompatActivity {
     }
 
     private void saveWallet() {
-
+        Wallet wallet = CapitalObservable.getInstance().getWallet();
+        sharedPreferences.edit().putFloat("money", wallet.getMoney()).apply();
+        for(String key : wallet.getPositions().keySet()) {
+            HashSet<Position> positions = Objects.requireNonNull(wallet.getPositions().get(key));
+            for(Position position : positions) {
+                DatabaseManager.savePosition(db, position);
+            }
+        }
     }
 
     @Override
@@ -165,6 +181,9 @@ public class AssetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_asset);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        sharedPreferences = getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE);
+        db = openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
 
         assetPriceView = findViewById(R.id.assetPriceView);
         assetPercentageView = findViewById(R.id.assetPercentView);
@@ -199,12 +218,15 @@ public class AssetActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        db.close();
         active = false;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
+        DatabaseManager.openOrCreateTable(db);
         active = true;
         updateStockPrice();
     }
