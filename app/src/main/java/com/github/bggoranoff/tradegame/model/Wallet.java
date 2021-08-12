@@ -38,7 +38,6 @@ public class Wallet {
         }
         money -= position.getPrice() * position.getQuantity();
         Objects.requireNonNull(positions.get(position.getSymbol())).add(position);
-        System.out.println(toString());
     }
 
     public void closePosition(Position position, float currentPrice) {

@@ -3,7 +3,9 @@ package com.github.bggoranoff.tradegame.util;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.provider.BaseColumns;
 
 import com.github.bggoranoff.tradegame.model.Position;
@@ -34,10 +36,20 @@ public class DatabaseManager {
 
     public static void savePosition(SQLiteDatabase db, Position position) {
         ContentValues values = new ContentValues();
+        values.put(SYMBOL, position.getSymbol());
+        values.put(TIME, position.getTimeInMillis());
         values.put(PRICE, position.getPrice());
         values.put(QUANTITY, position.getQuantity());
         values.put(BUY, position.isBuy());
         db.insert(TABLE_NAME, null, values);
+    }
+
+    public static void deletePositions(SQLiteDatabase db, String symbol) {
+        try {
+            db.delete(TABLE_NAME, SYMBOL + " = ?", new String[] {symbol});
+        } catch(SQLiteException ex) {
+            ex.printStackTrace();
+        }
     }
 
     // Returns full wallet, money must be set from sharedPreferences

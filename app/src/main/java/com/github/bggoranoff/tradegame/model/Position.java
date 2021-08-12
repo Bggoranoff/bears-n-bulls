@@ -59,6 +59,7 @@ public class Position {
     public String toString() {
         return "Position{" +
                 "symbol='" + symbol + '\'' +
+                ", time=" + timeInMillis +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 ", buy=" + buy +

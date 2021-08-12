@@ -178,11 +178,10 @@ public class AssetActivity extends AppCompatActivity {
     private void saveWallet() {
         Wallet wallet = CapitalObservable.getInstance().getWallet();
         sharedPreferences.edit().putFloat("money", wallet.getMoney()).apply();
-        for(String key : wallet.getPositions().keySet()) {
-            HashSet<Position> positions = Objects.requireNonNull(wallet.getPositions().get(key));
-            for(Position position : positions) {
-                DatabaseManager.savePosition(db, position);
-            }
+        DatabaseManager.deletePositions(db, stock.getSymbol());
+        HashSet<Position> positions = Objects.requireNonNull(wallet.getPositions().get(stock.getSymbol()));
+        for(Position position : positions) {
+            DatabaseManager.savePosition(db, position);
         }
     }
 
@@ -236,7 +235,6 @@ public class AssetActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        saveWallet();
     }
 
     @Override
