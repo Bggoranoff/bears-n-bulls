@@ -164,6 +164,7 @@ public class AssetActivity extends AppCompatActivity {
                     adapter.getPositions().add(openedPosition);
                     adapter.notifyDataSetChanged();
                     CapitalObservable.getInstance().setWallet(wallet);
+                    CapitalObservable.getInstance().setCapital(wallet.getMoney());
                     saveWallet();
                     dialog.dismiss();
                 } else {

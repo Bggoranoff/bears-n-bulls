@@ -44,6 +44,18 @@ public class DatabaseManager {
         db.insert(TABLE_NAME, null, values);
     }
 
+    public static void deletePosition(SQLiteDatabase db, Position position) {
+        try {
+            db.delete(
+                    TABLE_NAME,
+                    SYMBOL + " = ? AND " + TIME + " = ?",
+                    new String[] {position.getSymbol(), String.valueOf(position.getTimeInMillis())}
+            );
+        } catch(SQLiteException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static void deletePositions(SQLiteDatabase db, String symbol) {
         try {
             db.delete(TABLE_NAME, SYMBOL + " = ?", new String[] {symbol});

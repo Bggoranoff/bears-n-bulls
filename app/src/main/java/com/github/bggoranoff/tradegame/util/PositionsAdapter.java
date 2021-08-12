@@ -41,12 +41,16 @@ public class PositionsAdapter extends BaseAdapter {
 
     public void deletePosition(int position) {
         Position positionToDelete = positions.get(position);
-        positions.remove(position);
         AsyncTask.execute(() -> {
             try {
                 Stock stock = YahooFinance.get(positionToDelete.getSymbol());
                 BigDecimal price = stock.getQuote(true).getPrice();
                 CapitalObservable.getInstance().getWallet().closePosition(positionToDelete, price.floatValue());
+                CapitalObservable.getInstance().setCapital(CapitalObservable.getInstance().getWallet().getMoney());
+                activity.runOnUiThread(() -> {
+                    positions.remove(position);
+                    notifyDataSetChanged();
+                });
             } catch(IOException ex) {
                 ex.printStackTrace();
             }

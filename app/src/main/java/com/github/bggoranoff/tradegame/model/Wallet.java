@@ -44,6 +44,7 @@ public class Wallet {
         if(positions.containsKey(position.getSymbol()) && positions.get(position.getSymbol()).contains(position)) {
             Objects.requireNonNull(positions.get(position.getSymbol())).remove(position);
             money += position.getQuantity() * currentPrice;
+            positions.get(position.getSymbol()).remove(position);
         }
     }
 

@@ -93,23 +93,24 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         manualView = findViewById(R.id.manualTextView);
         manualView.setOnClickListener(this::redirectToManualActivity);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Toast.makeText(this, "Main resume!", Toast.LENGTH_SHORT).show();
         float money = sharedPreferences.getFloat("money", 1000.0f);
         capitalView.setText(String.format("$%.2f", money));
 
         db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
         DatabaseManager.openOrCreateTable(db);
         Wallet wallet = DatabaseManager.getWallet(db);
-        System.out.println(wallet);
         wallet.setMoney(money);
 
         CapitalObservable.getInstance().setWallet(wallet);
         CapitalObservable.getInstance().setCapital(wallet.getMoney());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(this, "Main resume!", Toast.LENGTH_SHORT).show();
+        capitalView.setText(String.format("$%.2f", CapitalObservable.getInstance().getCapital()));
     }
 
     @Override
