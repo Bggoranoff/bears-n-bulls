@@ -18,11 +18,13 @@ public class DatabaseManager {
     public static final String PRICE = "price";
     public static final String QUANTITY = "quantity";
     public static final String BUY = "buy";
+    public static final String TIME = "time";
 
     public static void openOrCreateTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
                 _ID + " INTEGER PRIMARY KEY, " +
                 SYMBOL + " VARCHAR, " +
+                TIME + " INTEGER, " +
                 PRICE + " REAL, " +
                 QUANTITY + " REAL, " +
                 BUY + " INTEGER" +
@@ -47,6 +49,7 @@ public class DatabaseManager {
         int priceIndex = cursor.getColumnIndex(PRICE);
         int quantityIndex = cursor.getColumnIndex(QUANTITY);
         int buyIndex = cursor.getColumnIndex(BUY);
+        int timeIndex = cursor.getColumnIndex(TIME);
 
         try {
             cursor.moveToFirst();
@@ -55,7 +58,8 @@ public class DatabaseManager {
                 float price = cursor.getFloat(priceIndex);
                 float quantity = cursor.getFloat(quantityIndex);
                 boolean buy = cursor.getInt(buyIndex) == 1;
-                Position position = new Position(symbol, price, quantity, buy);
+                long time = cursor.getLong(timeIndex);
+                Position position = new Position(symbol, time, price, quantity, buy);
                 result.addPosition(position);
             } while (cursor.moveToNext());
         } catch(CursorIndexOutOfBoundsException ex) {

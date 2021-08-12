@@ -5,12 +5,14 @@ public class Position {
     private float quantity;
     private float price;
     private boolean buy;
+    private long timeInMillis;
 
-    public Position(String symbol, float price, float quantity, boolean buy) {
+    public Position(String symbol,long timeInMillis , float price, float quantity, boolean buy) {
         this.symbol = symbol;
         this.price = price;
         this.quantity = quantity;
         this.buy = buy;
+        this.timeInMillis = timeInMillis;
     }
 
     public String getSymbol() {
@@ -43,6 +45,14 @@ public class Position {
 
     public void setBuy(boolean buy) {
         this.buy = buy;
+    }
+
+    public long getTimeInMillis() {
+        return timeInMillis;
+    }
+
+    public void setTimeInMillis(long timeInMillis) {
+        this.timeInMillis = timeInMillis;
     }
 
     @Override

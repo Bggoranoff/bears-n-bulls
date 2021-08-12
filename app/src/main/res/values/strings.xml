@@ -50,4 +50,7 @@
     <string name="default_percent">5.87%</string>
     <string name="buy">Buy</string>
     <string name="sell">Sell</string>
+
+    <string name="default_date">12/07/2021</string>
+    <string name="delete">Delete</string>
 </resources>

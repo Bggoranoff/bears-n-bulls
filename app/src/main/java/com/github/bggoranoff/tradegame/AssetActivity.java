@@ -14,6 +14,7 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.github.bggoranoff.tradegame.model.Position;
 import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.util.DatabaseManager;
+import com.github.bggoranoff.tradegame.util.PositionsAdapter;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -31,6 +33,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -44,6 +47,7 @@ public class AssetActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private SQLiteDatabase db;
+    private PositionsAdapter adapter;
 
     private Stock stock;
     private boolean active;
@@ -53,6 +57,7 @@ public class AssetActivity extends AppCompatActivity {
     private LineChart lineChart;
     private Button buyButton;
     private Button sellButton;
+    private ListView positionsListView;
 
 
     private void displayStockData(Stock stock, List<HistoricalQuote> history) {
@@ -147,12 +152,17 @@ public class AssetActivity extends AppCompatActivity {
                 Wallet wallet = CapitalObservable.getInstance().getWallet();
                 if (investedAmount <= wallet.getMoney()) {
                     float currentPrice = stock.getQuote().getPrice().floatValue();
-                    wallet.addPosition(new Position(
+
+                    Position openedPosition = new Position(
                             stock.getSymbol(),
+                            new Date().getTime(),
                             currentPrice,
                             investedAmount / currentPrice,
                             buy
-                    ));
+                    );
+                    wallet.addPosition(openedPosition);
+                    adapter.getPositions().add(openedPosition);
+                    adapter.notifyDataSetChanged();
                     CapitalObservable.getInstance().setWallet(wallet);
                     saveWallet();
                     dialog.dismiss();
@@ -176,6 +186,15 @@ public class AssetActivity extends AppCompatActivity {
         }
     }
 
+    private void displayPositions() {
+        Wallet wallet = CapitalObservable.getInstance().getWallet();
+        HashSet<Position> positions = wallet.getPositions().get(getIntent().getStringExtra("asset"));
+        if(positions == null) {
+            positions = new HashSet<>();
+        }
+        adapter.setPositions(new ArrayList<>(positions));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -184,6 +203,11 @@ public class AssetActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE);
         db = openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
+
+        positionsListView = findViewById(R.id.positionsListView);
+        adapter = new PositionsAdapter(this, new ArrayList<>());
+        displayPositions();
+        positionsListView.setAdapter(adapter);
 
         assetPriceView = findViewById(R.id.assetPriceView);
         assetPercentageView = findViewById(R.id.assetPercentView);
