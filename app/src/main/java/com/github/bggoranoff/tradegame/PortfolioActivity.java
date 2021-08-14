@@ -1,5 +1,6 @@
 package com.github.bggoranoff.tradegame;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -28,6 +29,7 @@ public class PortfolioActivity extends AppCompatActivity {
     private PositionsAdapter adapter;
 
     private TextView usernameTextView;
+    private TextView capitalTextView;
     private ListView positionsListView;
     private Button resetButton;
 
@@ -41,7 +43,16 @@ public class PortfolioActivity extends AppCompatActivity {
     }
 
     private void reset(View view) {
-        adapter.deleteAll();
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Reset portfolio")
+                .setMessage("Are you sure you want to reset your portfolio?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    adapter.deleteAll();
+                    capitalTextView.setText(String.format("$%.2f", CapitalObservable.getInstance().getCapital()));
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     @Override
@@ -54,6 +65,9 @@ public class PortfolioActivity extends AppCompatActivity {
 
         usernameTextView = findViewById(R.id.usernameTextView);
         usernameTextView.setText(sharedPreferences.getString("username", "Guest"));
+
+        capitalTextView = findViewById(R.id.capitalTextView);
+        capitalTextView.setText(String.format("$%.2f", CapitalObservable.getInstance().getCapital()));
 
         resetButton = findViewById(R.id.resetButton);
         resetButton.setOnClickListener(this::reset);
