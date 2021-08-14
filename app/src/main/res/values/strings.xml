@@ -53,4 +53,8 @@
 
     <string name="default_date">12/07/2021</string>
     <string name="delete">Delete</string>
+
+    <string name="since">Since Aug 2020</string>
+    <string name="past_month">Past month:</string>
+    <string name="reset">Reset</string>
 </resources>
