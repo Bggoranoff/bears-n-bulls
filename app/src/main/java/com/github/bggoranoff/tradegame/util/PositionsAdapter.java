@@ -2,6 +2,7 @@ package com.github.bggoranoff.tradegame.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.bggoranoff.tradegame.R;
 import com.github.bggoranoff.tradegame.model.Position;
+import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 
 import java.io.IOException;
@@ -31,15 +33,17 @@ public class PositionsAdapter extends BaseAdapter {
 
     private AppCompatActivity activity;
     private ArrayList<Position> positions;
+    private SQLiteDatabase db;
     private static LayoutInflater inflater = null;
 
-    public PositionsAdapter(AppCompatActivity activity, ArrayList<Position> positions) {
+    public PositionsAdapter(AppCompatActivity activity, ArrayList<Position> positions, SQLiteDatabase db) {
         this.activity = activity;
         this.positions = positions;
+        this.db = db;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void deletePosition(int position) {
+    private void deletePosition(int position) {
         Position positionToDelete = positions.get(position);
         AsyncTask.execute(() -> {
             try {
@@ -48,6 +52,10 @@ public class PositionsAdapter extends BaseAdapter {
                 CapitalObservable.getInstance().getWallet().closePosition(positionToDelete, price.floatValue());
                 CapitalObservable.getInstance().setCapital(CapitalObservable.getInstance().getWallet().getMoney());
                 activity.runOnUiThread(() -> {
+                    DatabaseManager.deletePosition(db, positionToDelete);
+                    activity.getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE)
+                            .edit().putFloat("money", CapitalObservable.getInstance().getCapital()).apply();
+
                     positions.remove(position);
                     notifyDataSetChanged();
                 });
@@ -55,6 +63,18 @@ public class PositionsAdapter extends BaseAdapter {
                 ex.printStackTrace();
             }
         });
+    }
+
+    public void deleteAll() {
+        CapitalObservable.getInstance().setWallet(new Wallet());
+        CapitalObservable.getInstance().setCapital(1000.0f);
+
+        activity.getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE)
+                .edit().putFloat("money", CapitalObservable.getInstance().getCapital()).apply();
+        DatabaseManager.wipe(db);
+
+        positions = new ArrayList<>();
+        notifyDataSetChanged();
     }
 
     @Override

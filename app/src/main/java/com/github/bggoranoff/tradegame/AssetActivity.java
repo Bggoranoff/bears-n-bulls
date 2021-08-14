@@ -204,11 +204,6 @@ public class AssetActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE);
         db = openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
 
-        positionsListView = findViewById(R.id.positionsListView);
-        adapter = new PositionsAdapter(this, new ArrayList<>());
-        displayPositions();
-        positionsListView.setAdapter(adapter);
-
         assetPriceView = findViewById(R.id.assetPriceView);
         assetPercentageView = findViewById(R.id.assetPercentView);
 
@@ -250,6 +245,12 @@ public class AssetActivity extends AppCompatActivity {
         super.onResume();
         db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
         DatabaseManager.openOrCreateTable(db);
+
+        positionsListView = findViewById(R.id.positionsListView);
+        adapter = new PositionsAdapter(this, new ArrayList<>(), db);
+        displayPositions();
+        positionsListView.setAdapter(adapter);
+
         active = true;
         updateStockPrice();
     }
