@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,12 +14,19 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.github.bggoranoff.tradegame.model.Wallet;
+import com.github.bggoranoff.tradegame.observable.CapitalObservable;
+import com.github.bggoranoff.tradegame.util.DatabaseManager;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements View.OnKeyListener {
 
     private SharedPreferences sharedPreferences;
+    private SQLiteDatabase db;
+
     private EditText usernameEditText;
     private ConstraintLayout layout;
     private TextView capitalView;
@@ -64,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         sharedPreferences = getSharedPreferences(
-                "com.github.bggoranoff.tradinggame",
+                "com.github.bggoranoff.tradegame",
                 Context.MODE_PRIVATE
         );
 
@@ -85,6 +93,30 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         manualView = findViewById(R.id.manualTextView);
         manualView.setOnClickListener(this::redirectToManualActivity);
+
+        float money = sharedPreferences.getFloat("money", 1000.0f);
+        capitalView.setText(String.format("$%.2f", money));
+
+        db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
+        DatabaseManager.openOrCreateTable(db);
+        Wallet wallet = DatabaseManager.getWallet(db);
+        wallet.setMoney(money);
+
+        CapitalObservable.getInstance().setWallet(wallet);
+        CapitalObservable.getInstance().setCapital(wallet.getMoney());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(this, "Main resume!", Toast.LENGTH_SHORT).show();
+        capitalView.setText(String.format("$%.2f", CapitalObservable.getInstance().getCapital()));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        db.close();
     }
 
     @Override
