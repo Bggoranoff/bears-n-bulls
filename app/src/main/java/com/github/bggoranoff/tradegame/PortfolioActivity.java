@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,21 +16,28 @@ import android.widget.TextView;
 import com.github.bggoranoff.tradegame.model.Position;
 import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
+import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;
 import com.github.bggoranoff.tradegame.util.DatabaseManager;
 import com.github.bggoranoff.tradegame.util.PositionsAdapter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Observer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PortfolioActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private SQLiteDatabase db;
     private PositionsAdapter adapter;
+    private Observer capitalObserver;
+    private CapitalAsyncTask capitalTask;
+    private Timer timer;
 
     private TextView usernameTextView;
-    private TextView capitalTextView;
+    private TextView capitalView;
     private ListView positionsListView;
     private Button resetButton;
 
@@ -49,7 +57,7 @@ public class PortfolioActivity extends AppCompatActivity {
                 .setMessage("Are you sure you want to reset your portfolio?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     adapter.deleteAll();
-                    capitalTextView.setText(String.format("$%.2f", CapitalObservable.getInstance().getCapital()));
+                    capitalView.setText(String.format("$%.2f", CapitalObservable.getInstance().getCapital()));
                 })
                 .setNegativeButton("No", null)
                 .show();
@@ -66,8 +74,10 @@ public class PortfolioActivity extends AppCompatActivity {
         usernameTextView = findViewById(R.id.usernameTextView);
         usernameTextView.setText(sharedPreferences.getString("username", "Guest"));
 
-        capitalTextView = findViewById(R.id.capitalTextView);
-        capitalTextView.setText(String.format("$%.2f", CapitalObservable.getInstance().getCapital()));
+        capitalView = findViewById(R.id.capitalTextView);
+        capitalObserver = (observable, arg) -> {
+            capitalView.setText(String.format("$%.2f", CapitalObservable.getInstance().getCapital()));
+        };
 
         resetButton = findViewById(R.id.resetButton);
         resetButton.setOnClickListener(this::reset);
@@ -79,6 +89,16 @@ public class PortfolioActivity extends AppCompatActivity {
         db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
         DatabaseManager.openOrCreateTable(db);
 
+        CapitalObservable.getInstance().addObserver(capitalObserver);
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                capitalTask = new CapitalAsyncTask(PortfolioActivity.this);
+                capitalTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        }, 0, 3000);
+
         positionsListView = findViewById(R.id.positionsListView);
         adapter = new PositionsAdapter(this, new ArrayList<>(), db);
         displayPositions();
@@ -89,5 +109,9 @@ public class PortfolioActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         db.close();
+
+        CapitalObservable.getInstance().deleteObserver(capitalObserver);
+        timer.cancel();
+        capitalTask.cancel(true);
     }
 }

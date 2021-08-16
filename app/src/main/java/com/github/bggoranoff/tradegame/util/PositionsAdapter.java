@@ -49,9 +49,9 @@ public class PositionsAdapter extends BaseAdapter {
             try {
                 Stock stock = YahooFinance.get(positionToDelete.getSymbol());
                 BigDecimal price = stock.getQuote(true).getPrice();
-                CapitalObservable.getInstance().getWallet().closePosition(positionToDelete, price.floatValue());
-                CapitalObservable.getInstance().setCapital(CapitalObservable.getInstance().getWallet().getMoney());
                 activity.runOnUiThread(() -> {
+                    CapitalObservable.getInstance().getWallet().closePosition(positionToDelete, price.floatValue());
+                    CapitalObservable.getInstance().setWallet(CapitalObservable.getInstance().getWallet());
                     DatabaseManager.deletePosition(db, positionToDelete);
                     activity.getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE)
                             .edit().putFloat("money", CapitalObservable.getInstance().getCapital()).apply();
