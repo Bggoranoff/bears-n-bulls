@@ -45,6 +45,7 @@ public class PortfolioActivity extends AppCompatActivity {
     private TextView usernameTextView;
     private TextView capitalView;
     private TextView profitView;
+    private TextView sinceView;
     private ListView positionsListView;
     private Button resetButton;
 
@@ -67,7 +68,8 @@ public class PortfolioActivity extends AppCompatActivity {
                 .setMessage("Are you sure you want to reset your portfolio?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     adapter.deleteAll();
-                    capitalView.setText(String.format("$%.2f", CapitalObservable.getInstance().getCapital()));
+                    capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
+                    sharedPreferences.edit().putString("lastReset", month).apply();
                     sharedPreferences.edit().remove(month).apply();
                 })
                 .setNegativeButton("No", null)
@@ -117,9 +119,17 @@ public class PortfolioActivity extends AppCompatActivity {
         saveMonthlyBase();
         displayMonthlyProfit(CapitalObservable.getInstance().getCapital());
 
+        sinceView = findViewById(R.id.sinceTextView);
+        String lastReset = sharedPreferences.getString("lastReset", null);
+        if(lastReset == null) {
+            lastReset = month;
+            sharedPreferences.edit().putString("lastReset", lastReset).apply();
+        }
+        sinceView.setText("Since " + lastReset);
+
         capitalView = findViewById(R.id.capitalTextView);
         capitalObserver = (observable, arg) -> {
-            capitalView.setText(String.format("$%.2f", CapitalObservable.getInstance().getCapital()));
+            capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
             displayMonthlyProfit(CapitalObservable.getInstance().getCapital());
         };
 

@@ -1,7 +1,6 @@
 package com.github.bggoranoff.tradegame;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 
 import android.content.Intent;
 import android.os.Bundle;
