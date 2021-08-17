@@ -79,6 +79,8 @@ public class PortfolioActivity extends AppCompatActivity {
                     capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
                     sharedPreferences.edit().putString("lastReset", month).apply();
                     sharedPreferences.edit().remove(month).apply();
+                    profitView.setText("0.00%");
+                    profitView.setTextColor(getResources().getColor(R.color.green, getTheme()));
                 })
                 .setNegativeButton("No", null)
                 .show();
@@ -136,6 +138,7 @@ public class PortfolioActivity extends AppCompatActivity {
         sinceView.setText("Since " + lastReset);
 
         capitalView = findViewById(R.id.capitalTextView);
+        capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
         capitalObserver = (observable, arg) -> {
             capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
             displayMonthlyProfit(CapitalObservable.getInstance().getCapital());

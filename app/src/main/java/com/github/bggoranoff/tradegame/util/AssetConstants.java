@@ -52,7 +52,7 @@ public class AssetConstants {
             put("XLM-USD", new Asset("XLM-USD", AssetType.CRYPTO, "xlm"));
             put("TRX-USD", new Asset("TRX-USD", AssetType.CRYPTO, "trx"));
             put("BNB-USD", new Asset("BNB-USD", AssetType.CRYPTO, "bnb"));
-            put("UNI-USD", new Asset("UNI-USD", AssetType.CRYPTO, "uni"));
+            put("UNI3-USD", new Asset("UNI3-USD", AssetType.CRYPTO, "uni"));
             put("DASH-USD", new Asset("DASH-USD", AssetType.CRYPTO, "dash"));
         }
     };

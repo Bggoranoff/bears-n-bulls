@@ -22,6 +22,7 @@ import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;
 import com.github.bggoranoff.tradegame.util.DatabaseManager;
 
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Observer;
 import java.util.Timer;
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         float money = sharedPreferences.getFloat("money", 1000.0f);
         capitalObserver = (observable, arg) -> {
-            capitalView.setText(String.format("$%.2f", CapitalObservable.getInstance().getCapital()));
+            capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
         };
 
         db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
@@ -121,7 +122,9 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         super.onResume();
         Toast.makeText(this, "Main resume!", Toast.LENGTH_SHORT).show();
 
+        capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
         CapitalObservable.getInstance().addObserver(capitalObserver);
+
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
