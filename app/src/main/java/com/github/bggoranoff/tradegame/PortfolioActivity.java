@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -48,9 +49,16 @@ public class PortfolioActivity extends AppCompatActivity {
     private TextView sinceView;
     private ListView positionsListView;
     private Button resetButton;
+    private Button tradeButton;
 
     private String month;
     private float monthlyBase;
+
+    private void redirectToTradeActivity(View view) {
+        Intent intent = new Intent(getApplicationContext(), TradeActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     private void displayPositions() {
         Wallet wallet = CapitalObservable.getInstance().getWallet();
@@ -135,6 +143,9 @@ public class PortfolioActivity extends AppCompatActivity {
 
         resetButton = findViewById(R.id.resetButton);
         resetButton.setOnClickListener(this::reset);
+
+        tradeButton = findViewById(R.id.tradeButton);
+        tradeButton.setOnClickListener(this::redirectToTradeActivity);
     }
 
     @Override
