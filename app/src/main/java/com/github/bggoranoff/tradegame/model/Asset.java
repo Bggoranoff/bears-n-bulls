@@ -4,9 +4,9 @@ public class Asset {
 
     private String symbol;
     private String fileName;
-    private String type;
+    private AssetType type;
 
-    public Asset(String symbol, String type, String fileName) {
+    public Asset(String symbol, AssetType type, String fileName) {
         this.symbol = symbol;
         this.type = type;
         this.fileName = fileName;
@@ -20,7 +20,7 @@ public class Asset {
         return fileName;
     }
 
-    public String getType() {
+    public AssetType getType() {
         return type;
     }
 }
