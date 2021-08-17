@@ -7,6 +7,9 @@ import java.util.HashMap;
 
 public class AssetConstants {
 
+    public static final int DIMENSIONS = 54;
+    public static final int MARGIN = 10;
+
     public static final HashMap<String, Asset> STOCKS = new HashMap<String, Asset>(){
         {
             put("AAPL", new Asset("AAPL", AssetType.STOCK, "aapl"));
@@ -36,7 +39,7 @@ public class AssetConstants {
         }
     };
 
-    private static final HashMap<String, Asset> CRYPTO = new HashMap<String, Asset>(){
+    public static final HashMap<String, Asset> CRYPTO = new HashMap<String, Asset>(){
         {
             put("BTC-USD", new Asset("BTC-USD", AssetType.CRYPTO, "btc"));
             put("ETH-USD", new Asset("ETH-USD", AssetType.CRYPTO, "eth"));
@@ -54,7 +57,7 @@ public class AssetConstants {
         }
     };
 
-    private static final HashMap<String, Asset> COMMODITIES = new HashMap<String, Asset>(){
+    public static final HashMap<String, Asset> COMMODITIES = new HashMap<String, Asset>(){
         {
             put("CL=F", new Asset("CL=F", AssetType.COMMODITY, "oil"));
             put("GC=F", new Asset("GC=F", AssetType.COMMODITY, "gold"));
@@ -69,7 +72,7 @@ public class AssetConstants {
         }
     };
 
-    private static final HashMap<String, Asset> FOREX = new HashMap<String, Asset>(){
+    public static final HashMap<String, Asset> FOREX = new HashMap<String, Asset>(){
         {
             put("EURUSD=X", new Asset("EURUSD=X", AssetType.FOREX, "eur"));
             put("CADUSD=X", new Asset("CADUSD=X", AssetType.FOREX, "cad"));
@@ -79,7 +82,7 @@ public class AssetConstants {
         }
     };
 
-    private static final HashMap<String, Asset> INDEX = new HashMap<String, Asset>(){
+    public static final HashMap<String, Asset> INDEX = new HashMap<String, Asset>(){
         {
             put("^GSPC", new Asset("^GSPC", AssetType.ETF, "snp500"));
             put("^GDAXI", new Asset("^GDAXI", AssetType.ETF, "ger30"));
