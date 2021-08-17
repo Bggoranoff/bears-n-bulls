@@ -92,78 +92,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
 
-                            <ImageView
-                                android:id="@+id/teslaCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/tesla"
-                                android:contentDescription="@string/tesla"
-                                android:tag="@string/tesla" />
 
-                            <ImageView
-                                android:id="@+id/samsungCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/samsung"
-                                android:contentDescription="@string/samsung"
-                                android:tag="@string/samsung" />
-
-                            <ImageView
-                                android:id="@+id/mastercardCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/mastercard"
-                                android:contentDescription="@string/mastercard"
-                                android:tag="@string/mastercard" />
-
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:id="@+id/nikeCell"
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/nike"
-                                android:contentDescription="@string/nike"
-                                android:tag="@string/nike" />
-
-                            <ImageView
-                                android:id="@+id/shellCell"
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/shell"
-                                android:contentDescription="@string/shell"
-                                android:tag="@string/shell" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp" />
-
-                        </TableRow>
                     </TableLayout>
 
                     <TextView
@@ -185,78 +115,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
 
-                            <ImageView
-                                android:id="@+id/oilCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/oil"
-                                android:contentDescription="@string/oil"
-                                android:tag="@string/oil" />
 
-                            <ImageView
-                                android:id="@+id/goldCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/gold"
-                                android:contentDescription="@string/gold"
-                                android:tag="@string/gold" />
-
-                            <ImageView
-                                android:id="@+id/copperCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/copper"
-                                android:contentDescription="@string/copper"
-                                android:tag="@string/copper" />
-
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:id="@+id/gasCell"
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/gas"
-                                android:contentDescription="@string/gas"
-                                android:tag="@string/gas" />
-
-                            <ImageView
-                                android:id="@+id/silverCell"
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/silver"
-                                android:contentDescription="@string/silver"
-                                android:tag="@string/silver" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp" />
-
-                        </TableRow>
                     </TableLayout>
 
                     <TextView
@@ -278,78 +138,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
 
-                            <ImageView
-                                android:id="@+id/nasdaqCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/nasdaq"
-                                android:contentDescription="@string/nasdaq"
-                                android:tag="@string/nasdaq" />
 
-                            <ImageView
-                                android:id="@+id/snp500Cell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/snp500"
-                                android:contentDescription="@string/snp500"
-                                android:tag="@string/snp500" />
-
-                            <ImageView
-                                android:id="@+id/ger30Cell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/ger30"
-                                android:contentDescription="@string/ger30"
-                                android:tag="@string/ger30" />
-
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:id="@+id/ftseCell"
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/ftse"
-                                android:contentDescription="@string/ftse"
-                                android:tag="@string/ftse" />
-
-                            <ImageView
-                                android:id="@+id/djiCell"
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/dji"
-                                android:contentDescription="@string/dji"
-                                android:tag="@string/dji" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp" />
-
-                        </TableRow>
                     </TableLayout>
 
                     <TextView
@@ -371,78 +161,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
 
-                            <ImageView
-                                android:id="@+id/bitcoinCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/bitcoin"
-                                android:contentDescription="@string/bitcoin"
-                                android:tag="@string/bitcoin" />
 
-                            <ImageView
-                                android:id="@+id/etheriumCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/etherium"
-                                android:contentDescription="@string/etherium"
-                                android:tag="@string/etherium" />
-
-                            <ImageView
-                                android:id="@+id/cardanoCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/cardano"
-                                android:contentDescription="@string/cardano"
-                                android:tag="@string/cardano" />
-
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:id="@+id/tronCell"
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/tron"
-                                android:contentDescription="@string/tron"
-                                android:tag="@string/tron" />
-
-                            <ImageView
-                                android:id="@+id/eosCell"
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/eos"
-                                android:contentDescription="@string/eos"
-                                android:tag="@string/eos" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp" />
-
-                        </TableRow>
                     </TableLayout>
 
                     <TextView
@@ -464,78 +184,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
 
-                            <ImageView
-                                android:id="@+id/eurCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/eur"
-                                android:contentDescription="@string/eur"
-                                android:tag="@string/eur" />
 
-                            <ImageView
-                                android:id="@+id/jpyCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/jpy"
-                                android:contentDescription="@string/jpy"
-                                android:tag="@string/jpy" />
-
-                            <ImageView
-                                android:id="@+id/gbpCell"
-                                android:layout_width="fill_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/gbp"
-                                android:contentDescription="@string/gbp"
-                                android:tag="@string/gbp" />
-
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:id="@+id/chfCell"
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/chf"
-                                android:contentDescription="@string/chf"
-                                android:tag="@string/chf" />
-
-                            <ImageView
-                                android:id="@+id/cadCell"
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/light_gray_icon"
-                                app:srcCompat="@drawable/cad"
-                                android:contentDescription="@string/cad"
-                                android:tag="@string/cad" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="72dp"
-                                android:layout_weight="1"
-                                android:layout_margin="10dp" />
-
-                        </TableRow>
                     </TableLayout>
 
                 </LinearLayout>
