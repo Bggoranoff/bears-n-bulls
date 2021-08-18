@@ -129,6 +129,16 @@ public class AssetActivity extends AppCompatActivity {
                         ex.printStackTrace();
                     }
 
+                    Date lastTradeTime = stock.getQuote().getLastTradeTime().getTime();
+                    Date currentTime = new Date();
+                    if(Math.abs(lastTradeTime.getTime() - currentTime.getTime()) < 5000) {
+                        buyButton.setEnabled(true);
+                        sellButton.setEnabled(true);
+                    } else {
+                        buyButton.setEnabled(false);
+                        sellButton.setEnabled(false);
+                    }
+
                     if(active) {
                         new Handler().postDelayed(this::updateStockPrice, 5000);
                     }
