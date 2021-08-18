@@ -182,11 +182,14 @@ public class AssetActivity extends AppCompatActivity {
                             investedAmount / currentPrice,
                             buy
                     );
+
                     wallet.addPosition(openedPosition);
                     adapter.getPositions().add(openedPosition);
                     adapter.notifyDataSetChanged();
+
                     CapitalObservable.getInstance().setWallet(wallet);
                     CapitalObservable.getInstance().setCapital(wallet.getMoney());
+
                     saveWallet();
                     dialog.dismiss();
                 } else {

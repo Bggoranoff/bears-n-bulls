@@ -119,6 +119,11 @@ public class PositionsAdapter extends BaseAdapter {
 
         TextView positionProfitView = view.findViewById(R.id.positionProfitView);
         float profit = (1 - positions.get(position).getPrice() / positions.get(position).getCurrentPrice()) * 100;
+
+        if(!positions.get(position).isBuy()) {
+            profit = -profit;
+        }
+        
         String profitPercentage = String.format(Locale.ENGLISH, "%.2f", profit) + "%";
         positionProfitView.setText(profitPercentage);
         positionProfitView.setTextColor(activity.getResources().getColor(profit >= 0 ? R.color.green : R.color.red, activity.getTheme()));
