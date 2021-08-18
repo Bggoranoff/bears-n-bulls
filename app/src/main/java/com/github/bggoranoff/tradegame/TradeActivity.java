@@ -1,5 +1,6 @@
 package com.github.bggoranoff.tradegame;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -130,7 +131,10 @@ public class TradeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trade);
-        Objects.requireNonNull(getSupportActionBar()).hide();
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
 
         linearLayout = findViewById(R.id.stocksLinearLayout);
         textView = findViewById(R.id.stockTitleView);
