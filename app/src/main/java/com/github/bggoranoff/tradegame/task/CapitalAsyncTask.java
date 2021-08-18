@@ -36,10 +36,12 @@ public class CapitalAsyncTask extends AsyncTask<Void, Void, Void> {
                 float stockPrice = Objects.requireNonNull(stocks.get(symbol)).getQuote().getPrice().floatValue();
                 for(Position position : Objects.requireNonNull(wallet.getPositions().get(symbol))) {
                     capital += position.getQuantity() * stockPrice;
+                    position.setCurrentPrice(stockPrice);
                 }
             }
             final float calculatedCapital = capital + wallet.getMoney();
             activity.runOnUiThread(() -> {
+                CapitalObservable.getInstance().setWallet(wallet);
                 CapitalObservable.getInstance().setCapital(calculatedCapital);
             });
         } catch(IOException ex) {

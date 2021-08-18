@@ -146,6 +146,7 @@ public class PortfolioActivity extends AppCompatActivity {
         capitalObserver = (observable, arg) -> {
             profileCapitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
             displayMonthlyProfit(CapitalObservable.getInstance().getCapital());
+            adapter.displayPositionsProfit();
         };
 
         resetButton = findViewById(R.id.resetButton);
@@ -161,7 +162,15 @@ public class PortfolioActivity extends AppCompatActivity {
         db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
         DatabaseManager.openOrCreateTable(db);
 
+        positionsListView = findViewById(R.id.positionsListView);
+        adapter = new PositionsAdapter(this, new ArrayList<>(), db);
+        displayPositions();
+        positionsListView.setAdapter(adapter);
+
         CapitalObservable.getInstance().addObserver(capitalObserver);
+        profileCapitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
+        adapter.displayPositionsProfit();
+
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -170,11 +179,6 @@ public class PortfolioActivity extends AppCompatActivity {
                 capitalTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         }, 0, 3000);
-
-        positionsListView = findViewById(R.id.positionsListView);
-        adapter = new PositionsAdapter(this, new ArrayList<>(), db);
-        displayPositions();
-        positionsListView.setAdapter(adapter);
     }
 
     @Override

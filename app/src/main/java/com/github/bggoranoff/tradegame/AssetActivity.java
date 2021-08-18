@@ -117,8 +117,20 @@ public class AssetActivity extends AppCompatActivity {
                     lineChart.setVisibleXRangeMaximum(120f);
                     lineChart.moveViewToX(lastIndex + 1);
 
+                    Wallet wallet = CapitalObservable.getInstance().getWallet();
+                    float stockPrice = stock.getQuote().getPrice().floatValue();
+                    try {
+                        for (Position position : Objects.requireNonNull(wallet.getPositions().get(stock.getSymbol()))) {
+                            position.setCurrentPrice(stockPrice);
+                        }
+                        CapitalObservable.getInstance().setWallet(wallet);
+                        adapter.displayPositionsProfit();
+                    } catch(NullPointerException ex) {
+                        ex.printStackTrace();
+                    }
+
                     if(active) {
-                        new Handler().postDelayed(this::updateStockPrice, 10000);
+                        new Handler().postDelayed(this::updateStockPrice, 5000);
                     }
                 });
             } catch (IOException e) {

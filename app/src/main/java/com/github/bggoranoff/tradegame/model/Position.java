@@ -4,6 +4,7 @@ public class Position {
     private String symbol;
     private float quantity;
     private float price;
+    private float currentPrice;
     private boolean buy;
     private long timeInMillis;
 
@@ -13,6 +14,7 @@ public class Position {
         this.quantity = quantity;
         this.buy = buy;
         this.timeInMillis = timeInMillis;
+        this.currentPrice = price;
     }
 
     public String getSymbol() {
@@ -37,6 +39,14 @@ public class Position {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public float getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(float currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     public boolean isBuy() {

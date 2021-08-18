@@ -24,7 +24,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Objects;
 
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
@@ -41,6 +44,15 @@ public class PositionsAdapter extends BaseAdapter {
         this.positions = positions;
         this.db = db;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public void displayPositionsProfit() {
+        HashMap<String, HashSet<Position>> currentPositions = CapitalObservable.getInstance().getWallet().getPositions();
+        positions = new ArrayList<>();
+        for(String key : currentPositions.keySet()) {
+            positions.addAll(Objects.requireNonNull(currentPositions.get(key)));
+        }
+        notifyDataSetChanged();
     }
 
     private void deletePosition(int position) {
@@ -104,6 +116,12 @@ public class PositionsAdapter extends BaseAdapter {
         String title = positions.get(position).getSymbol();
         title = (positions.get(position).isBuy() ? "Buy " : "Sell ") + title;
         positionTitleView.setText(title);
+
+        TextView positionProfitView = view.findViewById(R.id.positionProfitView);
+        float profit = (1 - positions.get(position).getPrice() / positions.get(position).getCurrentPrice()) * 100;
+        String profitPercentage = String.format(Locale.ENGLISH, "%.2f", profit) + "%";
+        positionProfitView.setText(profitPercentage);
+        positionProfitView.setTextColor(activity.getResources().getColor(profit >= 0 ? R.color.green : R.color.red, activity.getTheme()));
 
         TextView positionTimeView = view.findViewById(R.id.positionTime);
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
