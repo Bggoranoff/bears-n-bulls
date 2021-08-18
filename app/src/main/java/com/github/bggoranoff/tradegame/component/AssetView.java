@@ -4,7 +4,9 @@ import android.content.Context;
 import android.widget.TableRow;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
+import com.github.bggoranoff.tradegame.R;
 import com.github.bggoranoff.tradegame.model.Asset;
 import com.github.bggoranoff.tradegame.util.AssetConstants;
 import com.github.bggoranoff.tradegame.util.IconsSelector;
@@ -29,6 +31,7 @@ public class AssetView extends androidx.appcompat.widget.AppCompatImageView {
         setImageResource(IconsSelector.getDrawable(context, asset.getFileName()));
         setTag(asset.getSymbol());
         setContentDescription(asset.getSymbol());
+        setBackground(ResourcesCompat.getDrawable(context.getResources(), R.drawable.light_gray_icon, context.getTheme()));
     }
 
     public Asset getAsset() {

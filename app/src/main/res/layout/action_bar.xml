@@ -7,7 +7,7 @@
     android:background="@color/gray">
 
     <TextView
-        android:id="@+id/capitalView"
+        android:id="@+id/profileCapitalView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -17,7 +17,7 @@
         android:gravity="start"
         android:layout_gravity="center_vertical"
         android:text="@string/default_amount"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:textColor="@color/white"/>
 
     <LinearLayout

@@ -3,7 +3,10 @@ package com.github.bggoranoff.tradegame;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,25 +17,46 @@ import android.widget.TextView;
 
 import com.github.bggoranoff.tradegame.component.AssetView;
 import com.github.bggoranoff.tradegame.model.Asset;
+import com.github.bggoranoff.tradegame.observable.CapitalObservable;
+import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;
 import com.github.bggoranoff.tradegame.util.AssetConstants;
 import com.github.bggoranoff.tradegame.util.IconsSelector;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.Observer;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import static com.github.bggoranoff.tradegame.util.AssetConstants.*;
 
 public class TradeActivity extends AppCompatActivity {
 
+    private SharedPreferences sharedPreferences;
+
+    private Timer timer;
+    private CapitalAsyncTask capitalTask;
+    private Observer capitalObserver;
+
     private Button openButton;
     private LinearLayout linearLayout;
     private TextView textView;
-
+    private LinearLayout profileLayout;
+    private TextView profileUsernameView;
+    private TextView profileCapitalView;
     private View lastClicked = null;
 
     private void redirectToAssetActivity(View view) {
         Intent intent = new Intent(getApplicationContext(), AssetActivity.class);
         intent.putExtra("asset", textView.getText().toString());
         startActivity(intent);
+    }
+
+    private void redirectToPortfolioActivity(View view) {
+        Intent intent = new Intent(getApplicationContext(), PortfolioActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void clickAssetIcon(View view) {
@@ -132,9 +156,25 @@ public class TradeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trade);
 
+        sharedPreferences = getSharedPreferences(
+                "com.github.bggoranoff.tradegame",
+                Context.MODE_PRIVATE
+        );
+
         Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.action_bar);
+
+        profileUsernameView = getSupportActionBar().getCustomView().findViewById(R.id.profileUsernameView);
+        profileUsernameView.setText(sharedPreferences.getString("username", "Guest"));
+
+        profileCapitalView = getSupportActionBar().getCustomView().findViewById(R.id.profileCapitalView);
+        capitalObserver = (observable, arg) -> {
+            profileCapitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
+        };
+
+        profileLayout = getSupportActionBar().getCustomView().findViewById(R.id.profileLayout);
+        profileLayout.setOnClickListener(this::redirectToPortfolioActivity);
 
         linearLayout = findViewById(R.id.stocksLinearLayout);
         textView = findViewById(R.id.stockTitleView);
@@ -143,5 +183,31 @@ public class TradeActivity extends AppCompatActivity {
         openButton = findViewById(R.id.openButton);
         openButton.setOnClickListener(this::redirectToAssetActivity);
         openButton.setEnabled(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        CapitalObservable.getInstance().addObserver(capitalObserver);
+        profileCapitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                capitalTask = new CapitalAsyncTask(TradeActivity.this);
+                capitalTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        }, 0, 3000);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        CapitalObservable.getInstance().deleteObserver(capitalObserver);
+        timer.cancel();
+        capitalTask.cancel(true);
     }
 }

@@ -44,10 +44,10 @@ public class PortfolioActivity extends AppCompatActivity {
     private CapitalAsyncTask capitalTask;
     private Timer timer;
 
-    private TextView usernameTextView;
-    private TextView capitalView;
     private TextView profitView;
     private TextView sinceView;
+    private TextView profileUsernameView;
+    private TextView profileCapitalView;
     private ListView positionsListView;
     private Button resetButton;
     private Button tradeButton;
@@ -77,7 +77,7 @@ public class PortfolioActivity extends AppCompatActivity {
                 .setMessage("Are you sure you want to reset your portfolio?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     adapter.deleteAll();
-                    capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
+                    profileCapitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
                     sharedPreferences.edit().putString("lastReset", month).apply();
                     sharedPreferences.edit().remove(month).apply();
                     profitView.setText("0.00%");
@@ -124,11 +124,10 @@ public class PortfolioActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
-
         sharedPreferences = getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE);
 
-        usernameTextView = findViewById(R.id.usernameTextView);
-        usernameTextView.setText(sharedPreferences.getString("username", "Guest"));
+        profileUsernameView = getSupportActionBar().getCustomView().findViewById(R.id.profileUsernameView);
+        profileUsernameView.setText(sharedPreferences.getString("username", "Guest"));
 
         profitView = findViewById(R.id.monthlyProfitView);
         saveMonthlyBase();
@@ -142,10 +141,10 @@ public class PortfolioActivity extends AppCompatActivity {
         }
         sinceView.setText("Since " + lastReset);
 
-        capitalView = findViewById(R.id.capitalTextView);
-        capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
+        profileCapitalView = getSupportActionBar().getCustomView().findViewById(R.id.profileCapitalView);
+        profileCapitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
         capitalObserver = (observable, arg) -> {
-            capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
+            profileCapitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
             displayMonthlyProfit(CapitalObservable.getInstance().getCapital());
         };
 
