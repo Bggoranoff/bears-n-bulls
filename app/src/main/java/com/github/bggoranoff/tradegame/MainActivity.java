@@ -20,6 +20,7 @@ import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;
 import com.github.bggoranoff.tradegame.util.DatabaseManager;
+import com.github.bggoranoff.tradegame.util.IconsSelector;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -93,11 +94,14 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         capitalView = findViewById(R.id.capitalTextView);
         capitalView.setOnClickListener(this::hideKeyboard);
 
-        tradeButton = findViewById(R.id.tradeButton);
-        tradeButton.setOnClickListener(this::redirectToTradeActivity);
-
         portfolioButton = findViewById(R.id.portfolioButton);
         portfolioButton.setOnClickListener(this::redirectToPortfolioActivity);
+
+        tradeButton = findViewById(R.id.tradeButton);
+        tradeButton.setOnClickListener(this::redirectToTradeActivity);
+        portfolioButton.post(() -> {
+            tradeButton.setWidth(portfolioButton.getWidth());
+        });
 
         manualView = findViewById(R.id.manualTextView);
         manualView.setOnClickListener(this::redirectToManualActivity);

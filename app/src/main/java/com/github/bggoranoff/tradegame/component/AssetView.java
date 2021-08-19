@@ -31,7 +31,6 @@ public class AssetView extends androidx.appcompat.widget.AppCompatImageView {
         setImageResource(IconsSelector.getDrawable(context, asset.getFileName()));
         setTag(asset.getSymbol());
         setContentDescription(asset.getSymbol());
-        setBackground(ResourcesCompat.getDrawable(context.getResources(), R.drawable.light_gray_icon, context.getTheme()));
     }
 
     public Asset getAsset() {
