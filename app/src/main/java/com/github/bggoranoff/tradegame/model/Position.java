@@ -1,5 +1,12 @@
 package com.github.bggoranoff.tradegame.model;
 
+import androidx.annotation.NonNull;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class Position {
     private String symbol;
     private float quantity;
@@ -65,14 +72,11 @@ public class Position {
         this.timeInMillis = timeInMillis;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return "Position{" +
-                "symbol='" + symbol + '\'' +
-                ", time=" + timeInMillis +
-                ", quantity=" + quantity +
-                ", price=" + price +
-                ", buy=" + buy +
-                '}';
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss", Locale.ENGLISH);
+        String date = df.format(new Date(timeInMillis));
+        return String.format(Locale.ENGLISH, "Opened on: %s\nInvested: $%.2f\nQuantity: %.6f", date, quantity * price, quantity);
     }
 }

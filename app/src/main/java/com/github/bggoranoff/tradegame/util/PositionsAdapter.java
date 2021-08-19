@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.bggoranoff.tradegame.R;
@@ -36,7 +37,7 @@ public class PositionsAdapter extends BaseAdapter {
 
     private AppCompatActivity activity;
     private ArrayList<Position> positions;
-    private SQLiteDatabase db;
+    private final SQLiteDatabase db;
     private static LayoutInflater inflater = null;
 
     public PositionsAdapter(AppCompatActivity activity, ArrayList<Position> positions, SQLiteDatabase db) {
@@ -63,7 +64,9 @@ public class PositionsAdapter extends BaseAdapter {
     }
 
     private void deletePosition(int position) {
-        Position positionToDelete = positions.get(position);
+        Position positionToDelete = positions.remove(position);
+        notifyDataSetChanged();
+
         AsyncTask.execute(() -> {
             try {
                 Stock stock = YahooFinance.get(positionToDelete.getSymbol());
@@ -74,9 +77,6 @@ public class PositionsAdapter extends BaseAdapter {
                     DatabaseManager.deletePosition(db, positionToDelete);
                     activity.getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE)
                             .edit().putFloat("money", CapitalObservable.getInstance().getCapital()).apply();
-
-                    positions.remove(position);
-                    notifyDataSetChanged();
                 });
             } catch(IOException ex) {
                 ex.printStackTrace();
@@ -94,6 +94,15 @@ public class PositionsAdapter extends BaseAdapter {
 
         positions = new ArrayList<>();
         notifyDataSetChanged();
+    }
+
+    private void displayPositionDetails(String title, int position) {
+        new AlertDialog.Builder(activity)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(title)
+                .setMessage(positions.get(position).toString())
+                .setPositiveButton("Close", null)
+                .show();
     }
 
     @Override
@@ -120,9 +129,9 @@ public class PositionsAdapter extends BaseAdapter {
         }
 
         TextView positionTitleView = view.findViewById(R.id.positionTitle);
-        String title = positions.get(position).getSymbol();
-        title = (positions.get(position).isBuy() ? "Buy " : "Sell ") + title;
+        String title = (positions.get(position).isBuy() ? "Buy " : "Sell ") + positions.get(position).getSymbol();
         positionTitleView.setText(title);
+        positionTitleView.setOnClickListener(v -> displayPositionDetails(title, position));
 
         TextView positionProfitView = view.findViewById(R.id.positionProfitView);
         float profit = (1 - positions.get(position).getPrice() / positions.get(position).getCurrentPrice()) * 100;
