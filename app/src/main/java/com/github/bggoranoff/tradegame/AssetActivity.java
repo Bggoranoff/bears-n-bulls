@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -74,7 +75,14 @@ public class AssetActivity extends AppCompatActivity {
 
             lineChart.setData(data);
             lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(daySet));
+
+            lineChart.getXAxis().setTypeface(Typeface.MONOSPACE);
+            lineChart.getAxisLeft().setTypeface(Typeface.MONOSPACE);
+            lineChart.getAxisRight().setTypeface(Typeface.MONOSPACE);
+            lineChart.getLegend().setTypeface(Typeface.MONOSPACE);
+
             lineChart.getDescription().setText(stock.getName());
+            lineChart.getDescription().setTypeface(Typeface.MONOSPACE);
             lineChart.getDescription().setTextSize(15f);
 
             lineChart.animateXY(2000, 2000);
