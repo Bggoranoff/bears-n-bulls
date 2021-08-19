@@ -140,8 +140,6 @@ public class AssetActivity extends AppCompatActivity {
                     Date lastTradeTime = stock.getQuote().getLastTradeTime().getTime();
                     Date currentTime = new Date();
 
-                    Toast.makeText(this, lastTradeTime.toString(), Toast.LENGTH_SHORT).show();
-
                     if(Math.abs(lastTradeTime.getTime() - currentTime.getTime()) < 1000 * 60 * 30) {
                         buyButton.setEnabled(true);
                         sellButton.setEnabled(true);
