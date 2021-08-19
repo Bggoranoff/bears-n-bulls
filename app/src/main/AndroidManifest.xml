@@ -12,11 +12,16 @@
         android:roundIcon="@drawable/trading_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.TradeGame">
-        <activity android:name=".AssetActivity"></activity>
-        <activity android:name=".ManualActivity" />
-        <activity android:name=".PortfolioActivity" />
-        <activity android:name=".TradeActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".AssetActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ManualActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".PortfolioActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".TradeActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

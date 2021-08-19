@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Trade Game</string>
+    <string name="app_name">Bears \'n Bulls</string>
     <string name="username">Username</string>
     <string name="default_amount" />
     <string name="trade">Trade</string>
