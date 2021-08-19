@@ -64,6 +64,14 @@ public class DatabaseManager {
         }
     }
 
+    public static void wipe(SQLiteDatabase db) {
+        try {
+            db.delete(TABLE_NAME, null, null);
+        } catch(SQLiteException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     // Returns full wallet, money must be set from sharedPreferences
     public static Wallet getWallet(SQLiteDatabase db) {
         Wallet result = new Wallet();

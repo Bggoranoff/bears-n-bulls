@@ -12,7 +12,8 @@
         android:text="@string/company_name"
         android:textSize="16sp"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/positionDeleteIcon"
+        android:layout_toStartOf="@+id/positionProfitView"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="20dp"
         android:textStyle="bold"
         android:textColor="@color/black" />
@@ -22,12 +23,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/positionTitle"
-        android:layout_toStartOf="@+id/positionDeleteIcon"
+        android:layout_toStartOf="@+id/positionProfitView"
+        android:layout_marginEnd="16dp"
         android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:textSize="12sp"
         android:text="@string/default_date" />
+
+    <TextView
+        android:id="@+id/positionProfitView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/positionDeleteIcon"
+        android:text="@string/default_percent"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="8dp"
+        android:textSize="17sp"
+        android:textColor="@color/green" />
 
     <ImageView
         android:id="@+id/positionDeleteIcon"

@@ -117,8 +117,35 @@ public class AssetActivity extends AppCompatActivity {
                     lineChart.setVisibleXRangeMaximum(120f);
                     lineChart.moveViewToX(lastIndex + 1);
 
+                    Wallet wallet = CapitalObservable.getInstance().getWallet();
+                    float stockPrice = stock.getQuote().getPrice().floatValue();
+                    try {
+                        for (Position position : Objects.requireNonNull(wallet.getPositions().get(stock.getSymbol()))) {
+                            position.setCurrentPrice(stockPrice);
+                        }
+                        CapitalObservable.getInstance().setWallet(wallet);
+                        adapter.displayPositionsProfit(stock.getSymbol());
+                    } catch(NullPointerException ignored) {
+
+                    }
+
+                    Date lastTradeTime = stock.getQuote().getLastTradeTime().getTime();
+                    Date currentTime = new Date();
+
+                    if(Math.abs(lastTradeTime.getTime() - currentTime.getTime()) < 1000 * 60 * 10) {
+                        buyButton.setEnabled(true);
+                        sellButton.setEnabled(true);
+                        buyButton.setBackgroundColor(getResources().getColor(R.color.green, getTheme()));
+                        sellButton.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
+                    } else {
+                        buyButton.setEnabled(false);
+                        sellButton.setEnabled(false);
+                        buyButton.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
+                        sellButton.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
+                    }
+
                     if(active) {
-                        new Handler().postDelayed(this::updateStockPrice, 10000);
+                        new Handler().postDelayed(this::updateStockPrice, 5000);
                     }
                 });
             } catch (IOException e) {
@@ -160,11 +187,12 @@ public class AssetActivity extends AppCompatActivity {
                             investedAmount / currentPrice,
                             buy
                     );
+
                     wallet.addPosition(openedPosition);
                     adapter.getPositions().add(openedPosition);
                     adapter.notifyDataSetChanged();
+
                     CapitalObservable.getInstance().setWallet(wallet);
-                    CapitalObservable.getInstance().setCapital(wallet.getMoney());
                     saveWallet();
                     dialog.dismiss();
                 } else {
@@ -203,11 +231,6 @@ public class AssetActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE);
         db = openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
-
-        positionsListView = findViewById(R.id.positionsListView);
-        adapter = new PositionsAdapter(this, new ArrayList<>());
-        displayPositions();
-        positionsListView.setAdapter(adapter);
 
         assetPriceView = findViewById(R.id.assetPriceView);
         assetPercentageView = findViewById(R.id.assetPercentView);
@@ -250,6 +273,12 @@ public class AssetActivity extends AppCompatActivity {
         super.onResume();
         db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
         DatabaseManager.openOrCreateTable(db);
+
+        positionsListView = findViewById(R.id.positionsListView);
+        adapter = new PositionsAdapter(this, new ArrayList<>(), db);
+        displayPositions();
+        positionsListView.setAdapter(adapter);
+
         active = true;
         updateStockPrice();
     }

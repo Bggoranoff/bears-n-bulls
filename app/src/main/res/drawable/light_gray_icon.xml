@@ -4,9 +4,4 @@
     android:padding="10dp">
 
     <solid android:color="@color/lighter_gray" />
-    <corners
-        android:bottomRightRadius="10dp"
-        android:bottomLeftRadius="10dp"
-        android:topLeftRadius="10dp"
-        android:topRightRadius="10dp" />
 </shape>

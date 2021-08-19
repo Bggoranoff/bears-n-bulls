@@ -1,9 +1,17 @@
 package com.github.bggoranoff.tradegame.model;
 
+import androidx.annotation.NonNull;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class Position {
     private String symbol;
     private float quantity;
     private float price;
+    private float currentPrice;
     private boolean buy;
     private long timeInMillis;
 
@@ -13,6 +21,7 @@ public class Position {
         this.quantity = quantity;
         this.buy = buy;
         this.timeInMillis = timeInMillis;
+        this.currentPrice = price;
     }
 
     public String getSymbol() {
@@ -39,6 +48,14 @@ public class Position {
         this.price = price;
     }
 
+    public float getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(float currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
     public boolean isBuy() {
         return buy;
     }
@@ -55,14 +72,11 @@ public class Position {
         this.timeInMillis = timeInMillis;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return "Position{" +
-                "symbol='" + symbol + '\'' +
-                ", time=" + timeInMillis +
-                ", quantity=" + quantity +
-                ", price=" + price +
-                ", buy=" + buy +
-                '}';
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss", Locale.ENGLISH);
+        String date = df.format(new Date(timeInMillis));
+        return String.format(Locale.ENGLISH, "Opened on: %s\nInvested: $%.2f\nQuantity: %.6f", date, quantity * price, quantity);
     }
 }

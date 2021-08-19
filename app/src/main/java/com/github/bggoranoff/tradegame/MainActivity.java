@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -18,14 +19,22 @@ import android.widget.Toast;
 
 import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
+import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;
 import com.github.bggoranoff.tradegame.util.DatabaseManager;
 
+import java.util.Locale;
 import java.util.Objects;
+import java.util.Observer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements View.OnKeyListener {
 
     private SharedPreferences sharedPreferences;
     private SQLiteDatabase db;
+    private Observer capitalObserver;
+    private CapitalAsyncTask capitalTask;
+    private Timer timer;
 
     private EditText usernameEditText;
     private ConstraintLayout layout;
@@ -95,7 +104,9 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         manualView.setOnClickListener(this::redirectToManualActivity);
 
         float money = sharedPreferences.getFloat("money", 1000.0f);
-        capitalView.setText(String.format("$%.2f", money));
+        capitalObserver = (observable, arg) -> {
+            capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
+        };
 
         db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
         DatabaseManager.openOrCreateTable(db);
@@ -110,13 +121,28 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     protected void onResume() {
         super.onResume();
         Toast.makeText(this, "Main resume!", Toast.LENGTH_SHORT).show();
-        capitalView.setText(String.format("$%.2f", CapitalObservable.getInstance().getCapital()));
+
+        capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
+        CapitalObservable.getInstance().addObserver(capitalObserver);
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                capitalTask = new CapitalAsyncTask(MainActivity.this);
+                capitalTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        }, 0, 3000);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         db.close();
+
+        CapitalObservable.getInstance().deleteObserver(capitalObserver);
+        capitalTask.cancel(true);
+        timer.cancel();
     }
 
     @Override
