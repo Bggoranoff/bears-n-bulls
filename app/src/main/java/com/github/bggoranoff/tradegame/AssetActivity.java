@@ -124,19 +124,24 @@ public class AssetActivity extends AppCompatActivity {
                             position.setCurrentPrice(stockPrice);
                         }
                         CapitalObservable.getInstance().setWallet(wallet);
-                        adapter.displayPositionsProfit();
-                    } catch(NullPointerException ex) {
-                        ex.printStackTrace();
+                        adapter.displayPositionsProfit(stock.getSymbol());
+                    } catch(NullPointerException ignored) {
+
                     }
 
                     Date lastTradeTime = stock.getQuote().getLastTradeTime().getTime();
                     Date currentTime = new Date();
-                    if(Math.abs(lastTradeTime.getTime() - currentTime.getTime()) < 5000) {
+
+                    if(Math.abs(lastTradeTime.getTime() - currentTime.getTime()) < 1000 * 60 * 10) {
                         buyButton.setEnabled(true);
                         sellButton.setEnabled(true);
+                        buyButton.setBackgroundColor(getResources().getColor(R.color.green, getTheme()));
+                        sellButton.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
                     } else {
                         buyButton.setEnabled(false);
                         sellButton.setEnabled(false);
+                        buyButton.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
+                        sellButton.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
                     }
 
                     if(active) {
@@ -188,8 +193,6 @@ public class AssetActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
 
                     CapitalObservable.getInstance().setWallet(wallet);
-                    CapitalObservable.getInstance().setCapital(wallet.getMoney());
-
                     saveWallet();
                     dialog.dismiss();
                 } else {

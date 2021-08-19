@@ -55,6 +55,13 @@ public class PositionsAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void displayPositionsProfit(String key) {
+        HashMap<String, HashSet<Position>> currentPositions = CapitalObservable.getInstance().getWallet().getPositions();
+        positions = new ArrayList<>();
+        positions.addAll(Objects.requireNonNull(currentPositions.get(key)));
+        notifyDataSetChanged();
+    }
+
     private void deletePosition(int position) {
         Position positionToDelete = positions.get(position);
         AsyncTask.execute(() -> {
