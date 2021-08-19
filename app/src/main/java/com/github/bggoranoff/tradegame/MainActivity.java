@@ -15,7 +15,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
@@ -120,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this, "Main resume!", Toast.LENGTH_SHORT).show();
 
         capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
         CapitalObservable.getInstance().addObserver(capitalObserver);

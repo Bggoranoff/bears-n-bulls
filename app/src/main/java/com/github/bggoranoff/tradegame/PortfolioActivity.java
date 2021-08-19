@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.bggoranoff.tradegame.model.Position;
 import com.github.bggoranoff.tradegame.model.Wallet;
@@ -92,7 +91,6 @@ public class PortfolioActivity extends AppCompatActivity {
         Date currentDate = new Date();
         month = df.format(currentDate);
         if(!sharedPreferences.contains(month)) {
-            Toast.makeText(this, "Updating shared preferences " + CapitalObservable.getInstance().getCapital() + "!", Toast.LENGTH_SHORT).show();
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.MONTH, -1);
 
