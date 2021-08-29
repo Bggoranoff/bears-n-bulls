@@ -1,4 +1,4 @@
-package com.github.bggoranoff.tradegame;
+package com.github.bggoranoff.tradegame.activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.bggoranoff.tradegame.R;
 import com.github.bggoranoff.tradegame.model.Position;
 import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;

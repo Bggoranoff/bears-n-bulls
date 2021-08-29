@@ -1,4 +1,4 @@
-package com.github.bggoranoff.tradegame;
+package com.github.bggoranoff.tradegame.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.github.bggoranoff.tradegame.R;
 import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;

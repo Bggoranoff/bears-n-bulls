@@ -1,4 +1,4 @@
-package com.github.bggoranoff.tradegame;
+package com.github.bggoranoff.tradegame.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.webkit.WebView;
 
+import com.github.bggoranoff.tradegame.R;
 import com.github.bggoranoff.tradegame.util.TradeWebViewClient;
 
 import java.util.Objects;

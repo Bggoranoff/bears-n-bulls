@@ -1,4 +1,4 @@
-package com.github.bggoranoff.tradegame;
+package com.github.bggoranoff.tradegame.activity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +15,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.github.bggoranoff.tradegame.R;
 import com.github.bggoranoff.tradegame.component.AssetView;
 import com.github.bggoranoff.tradegame.model.Asset;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
