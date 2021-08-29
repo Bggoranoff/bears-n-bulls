@@ -1,4 +1,4 @@
-package com.github.bggoranoff.tradegame;
+package com.github.bggoranoff.tradegame.activity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,11 +15,13 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.github.bggoranoff.tradegame.R;
 import com.github.bggoranoff.tradegame.component.AssetView;
 import com.github.bggoranoff.tradegame.model.Asset;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;
 import com.github.bggoranoff.tradegame.util.AssetConstants;
+import com.github.bggoranoff.tradegame.util.Extras;
 import com.github.bggoranoff.tradegame.util.IconsSelector;
 
 import java.util.HashMap;
@@ -49,7 +51,7 @@ public class TradeActivity extends AppCompatActivity {
 
     private void redirectToAssetActivity(View view) {
         Intent intent = new Intent(getApplicationContext(), AssetActivity.class);
-        intent.putExtra("asset", textView.getText().toString());
+        intent.putExtra(Extras.ASSET, textView.getText().toString());
         startActivity(intent);
     }
 
@@ -157,7 +159,7 @@ public class TradeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_trade);
 
         sharedPreferences = getSharedPreferences(
-                "com.github.bggoranoff.tradegame",
+                MainActivity.PACKAGE,
                 Context.MODE_PRIVATE
         );
 
@@ -166,14 +168,14 @@ public class TradeActivity extends AppCompatActivity {
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
         profileUsernameView = getSupportActionBar().getCustomView().findViewById(R.id.profileUsernameView);
-        profileUsernameView.setText(sharedPreferences.getString("username", "Guest"));
+        profileUsernameView.setText(sharedPreferences.getString(Extras.USERNAME, MainActivity.DEFAULT_USERNAME));
 
         profileCapitalView = getSupportActionBar().getCustomView().findViewById(R.id.profileCapitalView);
         capitalObserver = (observable, arg) -> {
             profileCapitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
         };
 
-        profileLayout = getSupportActionBar().getCustomView().findViewById(R.id.profileLayout);
+        profileLayout = Objects.requireNonNull(getSupportActionBar()).getCustomView().findViewById(R.id.profileLayout);
         profileLayout.setOnClickListener(this::redirectToPortfolioActivity);
 
         linearLayout = findViewById(R.id.stocksLinearLayout);

@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Trade Game</string>
+    <string name="app_name">Bears \'n Bulls</string>
     <string name="username">Username</string>
-    <string name="default_amount">$967.81</string>
+    <string name="default_amount" />
     <string name="trade">Trade</string>
     <string name="portfolio">Portfolio</string>
     <string name="how_to">How to trade?</string>
@@ -45,16 +45,19 @@
     <string name="chf">CHFUSD=X</string>
     <string name="cad">CADUSD=X</string>
 
-    <string name="company_name">Company Ltd.</string>
-    <string name="default_price">$30.26</string>
-    <string name="default_percent">5.87%</string>
+    <string name="company_name" />
+    <string name="default_price" />
+    <string name="default_percent" />
     <string name="buy">Buy</string>
     <string name="sell">Sell</string>
 
-    <string name="default_date">12/07/2021</string>
+    <string name="default_date" />
     <string name="delete">Delete</string>
 
-    <string name="since">Since Aug 2020</string>
+    <string name="since" />
     <string name="past_month">Past month:</string>
     <string name="reset">Reset</string>
+
+    <string name="reset_portfolio">Reset Portfolio</string>
+    <string name="initial_percent">0.00%</string>
 </resources>

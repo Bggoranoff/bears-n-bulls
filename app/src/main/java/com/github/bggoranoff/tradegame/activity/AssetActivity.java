@@ -1,4 +1,4 @@
-package com.github.bggoranoff.tradegame;
+package com.github.bggoranoff.tradegame.activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,10 +19,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.bggoranoff.tradegame.R;
 import com.github.bggoranoff.tradegame.model.Position;
 import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.util.DatabaseManager;
+import com.github.bggoranoff.tradegame.util.Extras;
 import com.github.bggoranoff.tradegame.util.PositionsAdapter;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -74,7 +77,14 @@ public class AssetActivity extends AppCompatActivity {
 
             lineChart.setData(data);
             lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(daySet));
+
+            lineChart.getXAxis().setTypeface(Typeface.MONOSPACE);
+            lineChart.getAxisLeft().setTypeface(Typeface.MONOSPACE);
+            lineChart.getAxisRight().setTypeface(Typeface.MONOSPACE);
+            lineChart.getLegend().setTypeface(Typeface.MONOSPACE);
+
             lineChart.getDescription().setText(stock.getName());
+            lineChart.getDescription().setTypeface(Typeface.MONOSPACE);
             lineChart.getDescription().setTextSize(15f);
 
             lineChart.animateXY(2000, 2000);
@@ -95,7 +105,7 @@ public class AssetActivity extends AppCompatActivity {
     private void updateStockPrice() {
         AsyncTask.execute(() -> {
             try {
-                stock = YahooFinance.get(getIntent().getStringExtra("asset"));
+                stock = YahooFinance.get(getIntent().getStringExtra(Extras.ASSET));
                 BigDecimal price = stock.getQuote(true).getPrice();
                 BigDecimal percentage = stock.getQuote().getChangeInPercent();
 
@@ -132,7 +142,7 @@ public class AssetActivity extends AppCompatActivity {
                     Date lastTradeTime = stock.getQuote().getLastTradeTime().getTime();
                     Date currentTime = new Date();
 
-                    if(Math.abs(lastTradeTime.getTime() - currentTime.getTime()) < 1000 * 60 * 10) {
+                    if(Math.abs(lastTradeTime.getTime() - currentTime.getTime()) < 1000 * 60 * 30) {
                         buyButton.setEnabled(true);
                         sellButton.setEnabled(true);
                         buyButton.setBackgroundColor(getResources().getColor(R.color.green, getTheme()));
@@ -206,7 +216,7 @@ public class AssetActivity extends AppCompatActivity {
 
     private void saveWallet() {
         Wallet wallet = CapitalObservable.getInstance().getWallet();
-        sharedPreferences.edit().putFloat("money", wallet.getMoney()).apply();
+        sharedPreferences.edit().putFloat(Extras.MONEY, wallet.getMoney()).apply();
         DatabaseManager.deletePositions(db, stock.getSymbol());
         HashSet<Position> positions = Objects.requireNonNull(wallet.getPositions().get(stock.getSymbol()));
         for(Position position : positions) {
@@ -216,7 +226,7 @@ public class AssetActivity extends AppCompatActivity {
 
     private void displayPositions() {
         Wallet wallet = CapitalObservable.getInstance().getWallet();
-        HashSet<Position> positions = wallet.getPositions().get(getIntent().getStringExtra("asset"));
+        HashSet<Position> positions = wallet.getPositions().get(getIntent().getStringExtra(Extras.ASSET));
         if(positions == null) {
             positions = new HashSet<>();
         }
@@ -229,14 +239,14 @@ public class AssetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_asset);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
-        sharedPreferences = getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(MainActivity.PACKAGE, Context.MODE_PRIVATE);
         db = openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
 
         assetPriceView = findViewById(R.id.assetPriceView);
         assetPercentageView = findViewById(R.id.assetPercentView);
 
         lineChart = findViewById(R.id.lineChart);
-        String stockId = getIntent().getStringExtra("asset");
+        String stockId = getIntent().getStringExtra(Extras.ASSET);
         AsyncTask.execute(() -> {
             try {
                 Calendar from = Calendar.getInstance();

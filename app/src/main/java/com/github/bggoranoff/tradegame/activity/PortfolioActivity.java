@@ -1,4 +1,4 @@
-package com.github.bggoranoff.tradegame;
+package com.github.bggoranoff.tradegame.activity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -14,13 +14,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.github.bggoranoff.tradegame.R;
 import com.github.bggoranoff.tradegame.model.Position;
 import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;
 import com.github.bggoranoff.tradegame.util.DatabaseManager;
+import com.github.bggoranoff.tradegame.util.Extras;
 import com.github.bggoranoff.tradegame.util.PositionsAdapter;
 
 import java.text.DateFormat;
@@ -73,14 +74,14 @@ public class PortfolioActivity extends AppCompatActivity {
     private void reset(View view) {
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Reset portfolio")
+                .setTitle(R.string.reset_portfolio)
                 .setMessage("Are you sure you want to reset your portfolio?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     adapter.deleteAll();
                     profileCapitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
-                    sharedPreferences.edit().putString("lastReset", month).apply();
+                    sharedPreferences.edit().putString(Extras.LAST_RESET, month).apply();
                     sharedPreferences.edit().remove(month).apply();
-                    profitView.setText("0.00%");
+                    profitView.setText(R.string.initial_percent);
                     profitView.setTextColor(getResources().getColor(R.color.green, getTheme()));
                 })
                 .setNegativeButton("No", null)
@@ -92,7 +93,6 @@ public class PortfolioActivity extends AppCompatActivity {
         Date currentDate = new Date();
         month = df.format(currentDate);
         if(!sharedPreferences.contains(month)) {
-            Toast.makeText(this, "Updating shared preferences " + CapitalObservable.getInstance().getCapital() + "!", Toast.LENGTH_SHORT).show();
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.MONTH, -1);
 
@@ -124,20 +124,20 @@ public class PortfolioActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
-        sharedPreferences = getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(MainActivity.PACKAGE, Context.MODE_PRIVATE);
 
         profileUsernameView = getSupportActionBar().getCustomView().findViewById(R.id.profileUsernameView);
-        profileUsernameView.setText(sharedPreferences.getString("username", "Guest"));
+        profileUsernameView.setText(sharedPreferences.getString(Extras.USERNAME, MainActivity.DEFAULT_USERNAME));
 
         profitView = findViewById(R.id.monthlyProfitView);
         saveMonthlyBase();
         displayMonthlyProfit(CapitalObservable.getInstance().getCapital());
 
         sinceView = findViewById(R.id.sinceTextView);
-        String lastReset = sharedPreferences.getString("lastReset", null);
+        String lastReset = sharedPreferences.getString(Extras.LAST_RESET, null);
         if(lastReset == null) {
             lastReset = month;
-            sharedPreferences.edit().putString("lastReset", lastReset).apply();
+            sharedPreferences.edit().putString(Extras.LAST_RESET, lastReset).apply();
         }
         sinceView.setText("Since " + lastReset);
 

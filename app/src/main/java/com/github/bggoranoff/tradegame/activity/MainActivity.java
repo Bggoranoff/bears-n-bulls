@@ -1,4 +1,4 @@
-package com.github.bggoranoff.tradegame;
+package com.github.bggoranoff.tradegame.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -15,12 +15,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.github.bggoranoff.tradegame.R;
 import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;
 import com.github.bggoranoff.tradegame.util.DatabaseManager;
+import com.github.bggoranoff.tradegame.util.Extras;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -29,6 +30,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements View.OnKeyListener {
+
+    public static final String PACKAGE = "com.github.bggoranoff.tradegame";
+    public static final String DEFAULT_USERNAME = "Guest";
 
     private SharedPreferences sharedPreferences;
     private SQLiteDatabase db;
@@ -71,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
     private void saveUsername() {
         String username = usernameEditText.getText().toString();
-        sharedPreferences.edit().putString("username", username).apply();
+        sharedPreferences.edit().putString(Extras.USERNAME, username).apply();
     }
 
     @Override
@@ -81,12 +85,12 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         sharedPreferences = getSharedPreferences(
-                "com.github.bggoranoff.tradegame",
+                PACKAGE,
                 Context.MODE_PRIVATE
         );
 
         usernameEditText = findViewById(R.id.editTextUsername);
-        usernameEditText.setText(sharedPreferences.getString("username", ""));
+        usernameEditText.setText(sharedPreferences.getString(Extras.USERNAME, ""));
 
         layout = findViewById(R.id.homeLayout);
         layout.setOnClickListener(this::hideKeyboard);
@@ -94,11 +98,14 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         capitalView = findViewById(R.id.capitalTextView);
         capitalView.setOnClickListener(this::hideKeyboard);
 
-        tradeButton = findViewById(R.id.tradeButton);
-        tradeButton.setOnClickListener(this::redirectToTradeActivity);
-
         portfolioButton = findViewById(R.id.portfolioButton);
         portfolioButton.setOnClickListener(this::redirectToPortfolioActivity);
+
+        tradeButton = findViewById(R.id.tradeButton);
+        tradeButton.setOnClickListener(this::redirectToTradeActivity);
+        portfolioButton.post(() -> {
+            tradeButton.setWidth(portfolioButton.getWidth());
+        });
 
         manualView = findViewById(R.id.manualTextView);
         manualView.setOnClickListener(this::redirectToManualActivity);
@@ -120,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this, "Main resume!", Toast.LENGTH_SHORT).show();
 
         capitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
         CapitalObservable.getInstance().addObserver(capitalObserver);
