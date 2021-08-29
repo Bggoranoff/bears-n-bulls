@@ -20,6 +20,7 @@ import com.github.bggoranoff.tradegame.model.Asset;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;
 import com.github.bggoranoff.tradegame.util.AssetConstants;
+import com.github.bggoranoff.tradegame.util.Extras;
 import com.github.bggoranoff.tradegame.util.IconsSelector;
 
 import java.util.HashMap;
@@ -166,7 +167,7 @@ public class TradeActivity extends AppCompatActivity {
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
         profileUsernameView = getSupportActionBar().getCustomView().findViewById(R.id.profileUsernameView);
-        profileUsernameView.setText(sharedPreferences.getString("username", MainActivity.DEFAULT_USERNAME));
+        profileUsernameView.setText(sharedPreferences.getString(Extras.USERNAME, MainActivity.DEFAULT_USERNAME));
 
         profileCapitalView = getSupportActionBar().getCustomView().findViewById(R.id.profileCapitalView);
         capitalObserver = (observable, arg) -> {

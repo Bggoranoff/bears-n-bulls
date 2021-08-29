@@ -20,6 +20,7 @@ import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;
 import com.github.bggoranoff.tradegame.util.DatabaseManager;
+import com.github.bggoranoff.tradegame.util.Extras;
 import com.github.bggoranoff.tradegame.util.PositionsAdapter;
 
 import java.text.DateFormat;
@@ -77,7 +78,7 @@ public class PortfolioActivity extends AppCompatActivity {
                 .setPositiveButton("Yes", (dialog, which) -> {
                     adapter.deleteAll();
                     profileCapitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
-                    sharedPreferences.edit().putString("lastReset", month).apply();
+                    sharedPreferences.edit().putString(Extras.LAST_RESET, month).apply();
                     sharedPreferences.edit().remove(month).apply();
                     profitView.setText("0.00%");
                     profitView.setTextColor(getResources().getColor(R.color.green, getTheme()));
@@ -125,17 +126,17 @@ public class PortfolioActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(MainActivity.PACKAGE, Context.MODE_PRIVATE);
 
         profileUsernameView = getSupportActionBar().getCustomView().findViewById(R.id.profileUsernameView);
-        profileUsernameView.setText(sharedPreferences.getString("username", MainActivity.DEFAULT_USERNAME));
+        profileUsernameView.setText(sharedPreferences.getString(Extras.USERNAME, MainActivity.DEFAULT_USERNAME));
 
         profitView = findViewById(R.id.monthlyProfitView);
         saveMonthlyBase();
         displayMonthlyProfit(CapitalObservable.getInstance().getCapital());
 
         sinceView = findViewById(R.id.sinceTextView);
-        String lastReset = sharedPreferences.getString("lastReset", null);
+        String lastReset = sharedPreferences.getString(Extras.LAST_RESET, null);
         if(lastReset == null) {
             lastReset = month;
-            sharedPreferences.edit().putString("lastReset", lastReset).apply();
+            sharedPreferences.edit().putString(Extras.LAST_RESET, lastReset).apply();
         }
         sinceView.setText("Since " + lastReset);
 

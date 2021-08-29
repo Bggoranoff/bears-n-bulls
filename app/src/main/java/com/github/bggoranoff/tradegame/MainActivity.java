@@ -20,6 +20,7 @@ import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;
 import com.github.bggoranoff.tradegame.util.DatabaseManager;
+import com.github.bggoranoff.tradegame.util.Extras;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
     private void saveUsername() {
         String username = usernameEditText.getText().toString();
-        sharedPreferences.edit().putString("username", username).apply();
+        sharedPreferences.edit().putString(Extras.USERNAME, username).apply();
     }
 
     @Override
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         );
 
         usernameEditText = findViewById(R.id.editTextUsername);
-        usernameEditText.setText(sharedPreferences.getString("username", ""));
+        usernameEditText.setText(sharedPreferences.getString(Extras.USERNAME, ""));
 
         layout = findViewById(R.id.homeLayout);
         layout.setOnClickListener(this::hideKeyboard);

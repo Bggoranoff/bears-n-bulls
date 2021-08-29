@@ -23,6 +23,7 @@ import com.github.bggoranoff.tradegame.model.Position;
 import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.util.DatabaseManager;
+import com.github.bggoranoff.tradegame.util.Extras;
 import com.github.bggoranoff.tradegame.util.PositionsAdapter;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -214,7 +215,7 @@ public class AssetActivity extends AppCompatActivity {
 
     private void saveWallet() {
         Wallet wallet = CapitalObservable.getInstance().getWallet();
-        sharedPreferences.edit().putFloat("money", wallet.getMoney()).apply();
+        sharedPreferences.edit().putFloat(Extras.MONEY, wallet.getMoney()).apply();
         DatabaseManager.deletePositions(db, stock.getSymbol());
         HashSet<Position> positions = Objects.requireNonNull(wallet.getPositions().get(stock.getSymbol()));
         for(Position position : positions) {

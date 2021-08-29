@@ -13,6 +13,8 @@ import java.util.Objects;
 
 public class ManualActivity extends AppCompatActivity {
 
+    public static final String URL = "https://www.etoro.com/stocks/trading-and-investing-in-stocks/";
+
     private WebView manualView;
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -25,6 +27,6 @@ public class ManualActivity extends AppCompatActivity {
         manualView = findViewById(R.id.manualWebView);
         manualView.getSettings().setJavaScriptEnabled(true);
         manualView.setWebViewClient(new TradeWebViewClient(new ProgressDialog(ManualActivity.this)));
-        manualView.loadUrl("https://www.etoro.com/stocks/trading-and-investing-in-stocks/");
+        manualView.loadUrl(URL);
     }
 }
