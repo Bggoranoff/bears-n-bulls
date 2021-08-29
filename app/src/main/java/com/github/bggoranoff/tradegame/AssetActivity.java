@@ -104,7 +104,7 @@ public class AssetActivity extends AppCompatActivity {
     private void updateStockPrice() {
         AsyncTask.execute(() -> {
             try {
-                stock = YahooFinance.get(getIntent().getStringExtra("asset"));
+                stock = YahooFinance.get(getIntent().getStringExtra(Extras.ASSET));
                 BigDecimal price = stock.getQuote(true).getPrice();
                 BigDecimal percentage = stock.getQuote().getChangeInPercent();
 
@@ -225,7 +225,7 @@ public class AssetActivity extends AppCompatActivity {
 
     private void displayPositions() {
         Wallet wallet = CapitalObservable.getInstance().getWallet();
-        HashSet<Position> positions = wallet.getPositions().get(getIntent().getStringExtra("asset"));
+        HashSet<Position> positions = wallet.getPositions().get(getIntent().getStringExtra(Extras.ASSET));
         if(positions == null) {
             positions = new HashSet<>();
         }
@@ -245,7 +245,7 @@ public class AssetActivity extends AppCompatActivity {
         assetPercentageView = findViewById(R.id.assetPercentView);
 
         lineChart = findViewById(R.id.lineChart);
-        String stockId = getIntent().getStringExtra("asset");
+        String stockId = getIntent().getStringExtra(Extras.ASSET);
         AsyncTask.execute(() -> {
             try {
                 Calendar from = Calendar.getInstance();

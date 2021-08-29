@@ -50,7 +50,7 @@ public class TradeActivity extends AppCompatActivity {
 
     private void redirectToAssetActivity(View view) {
         Intent intent = new Intent(getApplicationContext(), AssetActivity.class);
-        intent.putExtra("asset", textView.getText().toString());
+        intent.putExtra(Extras.ASSET, textView.getText().toString());
         startActivity(intent);
     }
 
