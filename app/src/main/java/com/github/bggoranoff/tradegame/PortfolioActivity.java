@@ -73,14 +73,14 @@ public class PortfolioActivity extends AppCompatActivity {
     private void reset(View view) {
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Reset portfolio")
+                .setTitle(R.string.reset_portfolio)
                 .setMessage("Are you sure you want to reset your portfolio?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     adapter.deleteAll();
                     profileCapitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
                     sharedPreferences.edit().putString(Extras.LAST_RESET, month).apply();
                     sharedPreferences.edit().remove(month).apply();
-                    profitView.setText("0.00%");
+                    profitView.setText(R.string.initial_percent);
                     profitView.setTextColor(getResources().getColor(R.color.green, getTheme()));
                 })
                 .setNegativeButton("No", null)

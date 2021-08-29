@@ -57,4 +57,7 @@
     <string name="since" />
     <string name="past_month">Past month:</string>
     <string name="reset">Reset</string>
+
+    <string name="reset_portfolio">Reset Portfolio</string>
+    <string name="initial_percent">0.00%</string>
 </resources>
