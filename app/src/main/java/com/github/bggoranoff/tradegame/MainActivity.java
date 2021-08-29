@@ -20,7 +20,6 @@ import com.github.bggoranoff.tradegame.model.Wallet;
 import com.github.bggoranoff.tradegame.observable.CapitalObservable;
 import com.github.bggoranoff.tradegame.task.CapitalAsyncTask;
 import com.github.bggoranoff.tradegame.util.DatabaseManager;
-import com.github.bggoranoff.tradegame.util.IconsSelector;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -29,6 +28,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements View.OnKeyListener {
+
+    public static final String PACKAGE = "com.github.bggoranoff.tradegame";
+    public static final String DEFAULT_USERNAME = "Guest";
 
     private SharedPreferences sharedPreferences;
     private SQLiteDatabase db;
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         sharedPreferences = getSharedPreferences(
-                "com.github.bggoranoff.tradegame",
+                PACKAGE,
                 Context.MODE_PRIVATE
         );
 

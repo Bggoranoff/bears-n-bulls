@@ -122,10 +122,10 @@ public class PortfolioActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
-        sharedPreferences = getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(MainActivity.PACKAGE, Context.MODE_PRIVATE);
 
         profileUsernameView = getSupportActionBar().getCustomView().findViewById(R.id.profileUsernameView);
-        profileUsernameView.setText(sharedPreferences.getString("username", "Guest"));
+        profileUsernameView.setText(sharedPreferences.getString("username", MainActivity.DEFAULT_USERNAME));
 
         profitView = findViewById(R.id.monthlyProfitView);
         saveMonthlyBase();

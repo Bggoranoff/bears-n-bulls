@@ -157,7 +157,7 @@ public class TradeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_trade);
 
         sharedPreferences = getSharedPreferences(
-                "com.github.bggoranoff.tradegame",
+                MainActivity.PACKAGE,
                 Context.MODE_PRIVATE
         );
 
@@ -166,14 +166,14 @@ public class TradeActivity extends AppCompatActivity {
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
         profileUsernameView = getSupportActionBar().getCustomView().findViewById(R.id.profileUsernameView);
-        profileUsernameView.setText(sharedPreferences.getString("username", "Guest"));
+        profileUsernameView.setText(sharedPreferences.getString("username", MainActivity.DEFAULT_USERNAME));
 
         profileCapitalView = getSupportActionBar().getCustomView().findViewById(R.id.profileCapitalView);
         capitalObserver = (observable, arg) -> {
             profileCapitalView.setText(String.format(Locale.ENGLISH, "$%.2f", CapitalObservable.getInstance().getCapital()));
         };
 
-        profileLayout = getSupportActionBar().getCustomView().findViewById(R.id.profileLayout);
+        profileLayout = Objects.requireNonNull(getSupportActionBar()).getCustomView().findViewById(R.id.profileLayout);
         profileLayout.setOnClickListener(this::redirectToPortfolioActivity);
 
         linearLayout = findViewById(R.id.stocksLinearLayout);

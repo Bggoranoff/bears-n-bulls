@@ -237,7 +237,7 @@ public class AssetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_asset);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
-        sharedPreferences = getSharedPreferences("com.github.bggoranoff.tradegame", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(MainActivity.PACKAGE, Context.MODE_PRIVATE);
         db = openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
 
         assetPriceView = findViewById(R.id.assetPriceView);
